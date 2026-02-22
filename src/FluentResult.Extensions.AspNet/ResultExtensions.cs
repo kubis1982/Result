@@ -11,9 +11,10 @@ public static class ResultExtensions
         if (result.IsSuccess) return Results.Ok();
 
         var error = result.Error!.Value;
-        var status = MapStatus(error.Code);
+        var statusCode = GetStatusCode(error.Code);
+        var title = GetTitle(error.Code);
 
-        return Results.Problem(detail: error.Description, statusCode: status, title: error.Description, type: error.Code);
+        return Results.Problem(detail: error.Description, statusCode: statusCode, title: title, type: error.Code);
     }
 
     public static IResult ToResult<T>(this Result<T> result)
@@ -23,12 +24,13 @@ public static class ResultExtensions
         if (result.IsSuccess) return Results.Ok(result.Value);
 
         var error = result.Error!.Value;
-        var status = MapStatus(error.Code);
+        var statusCode = GetStatusCode(error.Code);
+        var title = GetTitle(error.Code);
 
-        return Results.Problem(detail: error.Description, statusCode: status, title: error.Description, type: error.Code);
+        return Results.Problem(detail: error.Description, statusCode: statusCode, title: title, type: error.Code);
     }
 
-    private static int MapStatus(string code) => code switch
+    private static int GetStatusCode(string code) => code switch
     {
         ResultErrorCodes.NotFound => StatusCodes.Status404NotFound,
         ResultErrorCodes.Conflict => StatusCodes.Status409Conflict,
@@ -36,5 +38,15 @@ public static class ResultExtensions
         ResultErrorCodes.Unauthorized => StatusCodes.Status401Unauthorized,
         ResultErrorCodes.Validation => StatusCodes.Status422UnprocessableEntity,
         _ => StatusCodes.Status400BadRequest
+    };
+
+    private static string GetTitle(string code) => code switch
+    {
+        ResultErrorCodes.NotFound => "Not Found",
+        ResultErrorCodes.Conflict => "Conflict",
+        ResultErrorCodes.Forbidden => "Forbidden",
+        ResultErrorCodes.Unauthorized => "Unauthorized",
+        ResultErrorCodes.Validation => "Validation Error",
+        _ => "Bad Request"
     };
 }
