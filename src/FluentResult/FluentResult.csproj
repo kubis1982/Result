@@ -1,3 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<PropertyGroup>
+		<PackageId>FluentResult</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>kubis1982</Authors>
+		<Company>kubis1982</Company>
+		<Description>A lightweight and fluent implementation of the Result pattern for .NET, providing type-safe error handling without exceptions.</Description>
+		<PackageTags>result;pattern;error-handling;fluent;functional;railway</PackageTags>
+		<PackageProjectUrl>https://github.com/kubis1982/fluent-result</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/kubis1982/fluent-result</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<IsPackable>true</IsPackable>
+		<RootNamespace>kubis1982.FluentResult</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
 </Project>

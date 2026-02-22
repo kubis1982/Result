@@ -1,4 +1,4 @@
-namespace FluentResult;
+namespace kubis1982.FluentResult;
 
 public partial class Result
 {
