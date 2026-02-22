@@ -10,6 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\..\LICENCE" Link="LICENCE" Pack="true" PackagePath=""/>
+		<None Include="..\..\README.md" Pack="true" PackagePath="" />
+		<None Include="..\..\docs\icon.jpg" Pack="true" PackagePath=""/>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\FluentResult\FluentResult.csproj" />
 	</ItemGroup>
 
