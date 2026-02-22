@@ -4,7 +4,6 @@ namespace kubis1982.FluentResult
     using JasperFx.CodeGeneration.Frames;
     using JasperFx.CodeGeneration.Model;
     using System;
-    using Wolverine;
     using Wolverine.Configuration;
     using Wolverine.Middleware;
 

@@ -14,7 +14,6 @@
 		<PackageProjectUrl>https://github.com/kubis1982/fluent-result</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/kubis1982/fluent-result</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -22,6 +21,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<NoWarn>$(NoWarn);CS1591</NoWarn>
 	</PropertyGroup>
 
