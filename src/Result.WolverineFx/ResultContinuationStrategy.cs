@@ -14,15 +14,14 @@ namespace kubis1982.Result
             var result = call.Creates.FirstOrDefault(x => x.VariableType == typeof(Result));
             if (result != null)
             {
-                frame = new MaybeEndHandlerWithCleanResultFrame(result, GetHandlerReturnType(call));
+                frame = new MaybeEndHandlerWithResultFrame(result, GetHandlerReturnType(call));
                 return true;
             }
 
-            result = call.Creates.FirstOrDefault(x =>
-                x.VariableType.IsGenericType && x.VariableType.GetGenericTypeDefinition() == typeof(Result<>));
+            result = call.Creates.FirstOrDefault(x => x.VariableType.IsGenericType && x.VariableType.GetGenericTypeDefinition() == typeof(Result<>));
             if (result != null)
             {
-                frame = new MaybeEndHandlerWithGenericCleanResultFrame(result, GetHandlerReturnType(call));
+                frame = new MaybeEndHandlerWithGenericResultFrame(result, GetHandlerReturnType(call));
                 return true;
             }
 
@@ -90,12 +89,12 @@ namespace kubis1982.Result
         }
 
       
-        private class MaybeEndHandlerWithCleanResultFrame : AsyncFrame
+        private class MaybeEndHandlerWithResultFrame : AsyncFrame
         {
             private readonly Type? _handlerReturnType;
             private readonly Variable _result;
 
-            public MaybeEndHandlerWithCleanResultFrame(Variable result, Type? handlerReturnType)
+            public MaybeEndHandlerWithResultFrame(Variable result, Type? handlerReturnType)
             {
                 uses.Add(result);
                 _result = result;
@@ -105,12 +104,11 @@ namespace kubis1982.Result
             public override void GenerateCode(GeneratedMethod method, ISourceWriter writer)
             {
                 writer.BlankLine();
-                writer.WriteComment("CleanResult continuation check for Result types");
+                writer.WriteComment("Result continuation check for Result types");
 
                 writer.Write($"BLOCK:if ({_result.Usage}.IsError())");
                 if (_handlerReturnType != null)
                     writer.Write(
-                        // Retype the Result type only if necessary
                         _handlerReturnType != _result.VariableType
                             ? $"await context.EnqueueCascadingAsync({GetFriendlyTypeName(_handlerReturnType)}.Error({_result.Usage}.ErrorValue)).ConfigureAwait(false);"
                             : $"await context.EnqueueCascadingAsync({_result.Usage}).ConfigureAwait(false);");
@@ -122,12 +120,12 @@ namespace kubis1982.Result
             }
         }
         
-        private class MaybeEndHandlerWithGenericCleanResultFrame : AsyncFrame
+        private class MaybeEndHandlerWithGenericResultFrame : AsyncFrame
         {
             private readonly Type? _handlerReturnType;
             private readonly Variable _result;
 
-            public MaybeEndHandlerWithGenericCleanResultFrame(Variable result, Type? handlerReturnType)
+            public MaybeEndHandlerWithGenericResultFrame(Variable result, Type? handlerReturnType)
             {
                 uses.Add(result);
                 // Register a new variable for the success value of the Result<T>
@@ -149,11 +147,10 @@ namespace kubis1982.Result
             public override void GenerateCode(GeneratedMethod method, ISourceWriter writer)
             {
                 writer.BlankLine();
-                writer.WriteComment("CleanResult continuation check for Result<T> types");
+                writer.WriteComment("Result continuation check for Result<T> types");
 
                 writer.Write($"BLOCK:if ({_result.Usage}.IsError())");
                 if (_handlerReturnType != null)
-                    // Retype the Result type only if necessary
                     writer.Write(
                         _handlerReturnType != _result.VariableType
                             ? $"await context.EnqueueCascadingAsync({GetFriendlyTypeName(_handlerReturnType)}.Error({_result.Usage}.ErrorValue)).ConfigureAwait(false);"
@@ -162,8 +159,7 @@ namespace kubis1982.Result
                 writer.FinishBlock();
 
                 writer.WriteComment("Extracting the success value from Result<T>");
-                writer.WriteLine(
-                    $"var {_result.Usage}SuccessValue = {_result.Usage}.Value;");
+                writer.WriteLine($"var {_result.Usage}SuccessValue = {_result.Usage}.Value;");
 
                 Next?.GenerateCode(method, writer);
             }
