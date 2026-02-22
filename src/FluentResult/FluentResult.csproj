@@ -13,12 +13,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<IsPackable>true</IsPackable>
-		<RootNamespace>kubis1982.FluentResult</RootNamespace>
+		<IsPackable>true</IsPackable>		
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
 
 </Project>

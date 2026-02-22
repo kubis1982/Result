@@ -45,5 +45,29 @@ partial class Result<T>
     public static explicit operator T(Result<T> result) => result.Value;
 
     #endregion
+
+    #region Mapping
+
+    public Result<TOut> Map<TOut>(Func<T, TOut> mapper)
+    {
+        if (!IsSuccess)
+        {
+            return Result<TOut>.Failure(Error!.Value);
+        }
+
+        return Result<TOut>.Success(mapper(_value!));
+    }
+
+    public Result<TOut> Map<TOut>()
+    {
+        if (!IsSuccess)
+        {
+            return Result<TOut>.Failure(Error!.Value);
+        }
+
+        throw new InvalidOperationException("Cannot map success result without mapping function. Use Map<TOut>(Func<T, TOut> mapper) instead.");
+    }
+
+    #endregion
 }
 
