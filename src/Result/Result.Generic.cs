@@ -1,4 +1,4 @@
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 /// <summary>
 /// Represents the result of an operation that produces a value of type <typeparamref name="T"/> on success.

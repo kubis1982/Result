@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyName>kubis1982.FluentResult.Extensions.Wolverine</AssemblyName>
+		<AssemblyName>kubis1982.Result.WolverineFx</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\LICENCE" Link="LICENCE" Pack="true" PackagePath=""/>
+		<None Include="..\..\LICENCE" Link="LICENCE" Pack="true" PackagePath="" />
 		<None Include="..\..\README.md" Pack="true" PackagePath="" />
-		<None Include="..\..\docs\icon.png" Pack="true" PackagePath=""/>
+		<None Include="..\..\docs\icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\FluentResult\FluentResult.csproj" />
+		<ProjectReference Include="..\Result\Result.csproj" />
 	</ItemGroup>
 
 </Project>

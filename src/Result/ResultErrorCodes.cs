@@ -1,4 +1,4 @@
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 /// <summary>
 /// Common error code constants used when creating <see cref="ResultError"/> instances.

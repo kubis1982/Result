@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 /// <summary>
 /// Extension methods for converting FluentResult types to ASP.NET Core IResult responses.
@@ -10,11 +10,11 @@ public static class ResultExtensions
 {
     /// <summary>
     /// Converts a Result to an ASP.NET Core IResult.
-    /// Success results return HTTP 200 (OK), while error results return appropriate HTTP status codes.
+    /// Success results return HTTP 204 (No Content), while error results return appropriate HTTP status codes.
     /// </summary>
     /// <param name="result">The Result to convert.</param>
     /// <returns>
-    /// For success: HTTP 200 OK response.
+    /// For success: HTTP 204 No Content response.
     /// For errors: HTTP Problem Details response with appropriate status code based on error type.
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown when result is null.</exception>
@@ -22,8 +22,8 @@ public static class ResultExtensions
     {
         ArgumentNullException.ThrowIfNull(result);
 
-        // Success case: Return HTTP 200 OK
-        if (result.IsSuccess) return Results.Ok();
+        // Success case: Return HTTP 204 NoContent
+        if (result.IsSuccess) return Results.NoContent();
 
         // Error case: Map error to appropriate HTTP status code and problem details
         var error = result.Error!.Value;

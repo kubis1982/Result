@@ -1,0 +1,16 @@
+
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="LICENCE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Source/">
+    <Project Path="src/Result.AspNet/Result.AspNet.csproj" />
+    <Project Path="src/Result.WolverineFx/Result.WolverineFx.csproj" />
+    <Project Path="src/Result/Result.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Result.Tests/Result.Tests.csproj" />
+  </Folder>
+</Solution>

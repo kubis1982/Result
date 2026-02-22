@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FluentResult\FluentResult.csproj" />
+    <ProjectReference Include="..\..\src\Result\Result.csproj" />
   </ItemGroup>
 
 </Project>

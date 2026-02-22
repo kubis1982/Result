@@ -1,4 +1,4 @@
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 /// <summary>
 /// Represents the outcome of an operation which can be either success or failure.

@@ -1,4 +1,4 @@
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 /// <summary>
 /// Exception thrown when accessing the value of a failed <see cref="Result"/> or <see cref="Result{T}"/>.

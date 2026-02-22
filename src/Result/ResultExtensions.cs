@@ -1,4 +1,4 @@
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 using static System.Runtime.InteropServices.JavaScript.JSType;
 

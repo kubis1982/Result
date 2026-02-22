@@ -1,4 +1,4 @@
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 /// <summary>
 /// Represents a lightweight error descriptor used by <see cref="Result"/> to indicate failure.

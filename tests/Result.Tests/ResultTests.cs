@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace kubis1982.FluentResult;
+namespace kubis1982.Result;
 
 public class ResultTests
 {
