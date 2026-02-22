@@ -8,4 +8,25 @@
 		<RootNamespace>kubis1982.FluentResult</RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<Copyright>Copyright © 2026 kubis1982.</Copyright>
+		<Authors>kubis1982</Authors>
+		<Company>kubis1982</Company>
+		<PackageProjectUrl>https://github.com/kubis1982/fluent-result</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/kubis1982/fluent-result</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+	</PropertyGroup>
+
 </Project>

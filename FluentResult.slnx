@@ -5,11 +5,11 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Source/">
-    <Project Path="src\FluentResult.Extensions.AspNet\FluentResult.Extensions.AspNet.csproj" />
-    <Project Path="src\FluentResult.Extensions.Wolverine\FluentResult.Extensions.Wolverine.csproj" />
-    <Project Path="src\FluentResult\FluentResult.csproj" />
+    <Project Path="src/FluentResult.Extensions.AspNet/FluentResult.Extensions.AspNet.csproj" />
+    <Project Path="src/FluentResult.Extensions.Wolverine/FluentResult.Extensions.Wolverine.csproj" />
+    <Project Path="src/FluentResult/FluentResult.csproj" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="tests\FluentResult.Tests\FluentResult.Tests.csproj" />
+    <Project Path="tests/FluentResult.Tests/FluentResult.Tests.csproj" />
   </Folder>
 </Solution>
