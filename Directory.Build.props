@@ -9,9 +9,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Copyright>Copyright © 2026 kubis1982.</Copyright>
-		<Authors>kubis1982</Authors>
-		<Company>kubis1982</Company>
+		<Copyright>Copyright © 2026 Mariusz Świątnicki.</Copyright>
+		<Authors>Mariusz Świątnicki</Authors>
 		<PackageProjectUrl>https://github.com/kubis1982/fluent-result</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/kubis1982/fluent-result</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
