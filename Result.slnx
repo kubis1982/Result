@@ -1,5 +1,8 @@
 
 <Solution>
+  <Folder Name="/CI/">
+    <File Path=".github/workflows/dotnet.yml" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="Directory.Build.props" />
     <File Path="LICENCE" />
@@ -12,5 +15,6 @@
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/Result.Tests/Result.Tests.csproj" />
+    <Project Path="tests/Result.WolverineFx.Tests/Result.WolverineFx.Tests.csproj" />
   </Folder>
 </Solution>
