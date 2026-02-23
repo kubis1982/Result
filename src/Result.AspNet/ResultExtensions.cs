@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace kubis1982.Result;
+namespace Kubis1982.Result;
 
 /// <summary>
 /// Extension methods for converting FluentResult types to ASP.NET Core IResult responses.

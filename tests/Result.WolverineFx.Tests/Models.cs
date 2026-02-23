@@ -1,4 +1,4 @@
-namespace kubis1982.Result
+namespace Kubis1982.Result
 {
     public record ContractorDto(int Id, string Name);
 

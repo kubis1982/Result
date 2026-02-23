@@ -1,4 +1,4 @@
-namespace kubis1982.Result.Handlers
+namespace Kubis1982.Result.Handlers
 {
     public record ResultTCommand(int ContractorId);
 }

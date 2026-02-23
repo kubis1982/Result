@@ -1,4 +1,4 @@
-namespace kubis1982.Result;
+namespace Kubis1982.Result;
 
 public static class ResultExtensions
 {

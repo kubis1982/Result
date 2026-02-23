@@ -1,4 +1,4 @@
-namespace kubis1982.Result
+namespace Kubis1982.Result
 {
     using JasperFx.CodeGeneration;
     using JasperFx.CodeGeneration.Frames;

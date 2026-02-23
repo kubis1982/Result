@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-		<RootNamespace>kubis1982.Result</RootNamespace>
+		<RootNamespace>Kubis1982.Result</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup>
