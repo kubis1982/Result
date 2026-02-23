@@ -16,7 +16,7 @@ public class ResultTests
     [Fact]
     public void Failure_WithError_ReturnsFailureWithError()
     {
-        var error = ResultError.Error("E001", "failure");
+        var error = ResultError.Custom("E001", "failure");
         var result = Result.Failure(error);
 
         Assert.False(result.IsSuccess);
@@ -107,7 +107,7 @@ public class ResultTests
     [Fact]
     public void ValueOrDefault_OnFailureResult_ReturnsDefault()
     {
-        var error = ResultError.Error("E2", "failed");
+        var error = ResultError.Custom("E2", "failed");
         var result = Result<string>.Failure(error);
 
         var value = result.ValueOrDefault;

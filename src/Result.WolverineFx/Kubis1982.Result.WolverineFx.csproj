@@ -1,10 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<Copyright>Copyright © 2026 Mariusz Świątnicki.</Copyright>
+		<Authors>Mariusz Świątnicki</Authors>
+		<PackageProjectUrl>https://github.com/kubis1982/Result</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/kubis1982/Result</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Version>0.5.0</Version>
+		<Description>WolverineFx extensions for Result, providing message-handling and middleware integrations for WolverineFx.</Description>
+		<PackageTags>result;wolverinefx;wolverine;messaging;extensions</PackageTags>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\LICENCE" Link="LICENCE" Pack="true" PackagePath="" />
-		<None Include="..\..\README.md" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" />
 		<None Include="..\..\docs\icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 

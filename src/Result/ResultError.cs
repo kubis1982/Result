@@ -36,6 +36,6 @@ public readonly record struct ResultError(string Code, string Description)
     /// <summary>
     /// Creates a custom error with the specified code and description.
     /// </summary>
-    public static ResultError Error(string code, string description) => new(code, description);
+    public static ResultError Custom(string code, string description) => new(code, description);
 }
 

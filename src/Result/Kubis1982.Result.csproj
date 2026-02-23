@@ -1,15 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<Copyright>Copyright © 2026 Mariusz Świątnicki.</Copyright>
+		<Authors>Mariusz Świątnicki</Authors>
+		<PackageProjectUrl>https://github.com/kubis1982/Result</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/kubis1982/Result</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Version>0.5.0</Version>
-		<Description>A lightweight and fluent implementation of the Result pattern for .NET, providing type-safe error handling without exceptions.</Description>
+		<Description>A lightweight implementation of the Result pattern for .NET, providing type-safe error handling without exceptions.</Description>
 		<PackageTags>result;pattern;error-handling;fluent;functional;railway</PackageTags>
-		<IsPackable>true</IsPackable>		
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\..\LICENCE" Link="LICENCE" Pack="true" PackagePath=""/>
-		<None Include="..\..\README.md" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" />
 		<None Include="..\..\docs\icon.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
 
