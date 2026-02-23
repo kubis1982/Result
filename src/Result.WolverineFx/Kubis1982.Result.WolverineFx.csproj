@@ -2,7 +2,6 @@
 	<PropertyGroup>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
-		<Version>1.2.0</Version>
 		<Description>WolverineFx extensions for Result, providing message-handling and middleware integrations for WolverineFx.</Description>
 		<PackageTags>result;wolverinefx;wolverine;messaging;extensions</PackageTags>
 		<IsPackable>true</IsPackable>

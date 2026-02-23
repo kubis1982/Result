@@ -2,10 +2,9 @@
 
 	<PropertyGroup>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIcon>icon.png</PackageIcon>
-		<Version>1.2.0</Version>
+		<PackageIcon>icon.png</PackageIcon>		
 		<Description>ASP.NET Core extensions for Result, providing IResult conversions and ProblemDetails integration.</Description>
-		<PackageTags>result;aspnet;problem-details;http;results</PackageTags>		
+		<PackageTags>result;aspnet;problem-details;http;results</PackageTags>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
@@ -20,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Result\Kubis1982.Result.csproj" />
+		<ProjectReference Include="..\Result\Kubis1982.Result.csproj" />
 	</ItemGroup>
 
 </Project>

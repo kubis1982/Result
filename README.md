@@ -8,6 +8,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/download)
+[![.NET CI](https://github.com/kubis1982/Result/actions/workflows/dotnet.yml/badge.svg)](https://github.com/kubis1982/Result/actions/workflows/dotnet.yml)
+[![Release](https://github.com/kubis1982/Result/actions/workflows/release.yml/badge.svg)](https://github.com/kubis1982/Result/actions/workflows/release.yml)
 
 </div>
 
@@ -90,6 +92,16 @@ dotnet test tests/Result.WolverineFx.Tests/Kubis1982.Result.WolverineFx.Tests.cs
 - **xUnit v3** - Modern testing framework
 - **Coverlet** - Code coverage collection
 - **Microsoft.NET.Test.Sdk** - Test platform integration
+
+---
+
+## 🔄 Release Process
+
+This repository uses automated CI/CD for publishing releases:
+
+- **Continuous Integration**: All commits to `main` are automatically tested
+- **Automated Releases**: Creating a version tag (e.g., `v1.2.0`) triggers the full release pipeline
+- **NuGet Publishing**: Packages are automatically published to NuGet.org
 
 ---
 

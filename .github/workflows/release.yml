@@ -1,0 +1,270 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  validate-version:
+    name: Validate Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract-version.outputs.version }}
+      is-valid: ${{ steps.validate.outputs.is-valid }}
+    steps:
+      - name: Extract version from tag
+        id: extract-version
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/v}"
+          echo "version=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "Version extracted: $TAG_NAME"
+
+      - name: Validate version format
+        id: validate
+        run: |
+          VERSION="${{ steps.extract-version.outputs.version }}"
+          if [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "is-valid=true" >> $GITHUB_OUTPUT
+            echo "✅ Version format is valid: $VERSION"
+          else
+            echo "is-valid=false" >> $GITHUB_OUTPUT
+            echo "❌ Invalid version format: $VERSION. Expected format: x.y.z"
+            exit 1
+          fi
+
+  test:
+    name: Run Tests
+    needs: validate-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test --no-build --configuration Release --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/TestResults/*.trx'
+
+  create-release-branch:
+    name: Create Release Branch
+    needs: [validate-version, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create release branch
+        run: |
+          VERSION="${{ needs.validate-version.outputs.version }}"
+          BRANCH_NAME="release/v$VERSION"
+          git checkout -b $BRANCH_NAME
+          echo "✅ Created branch: $BRANCH_NAME"
+
+      - name: Update version in Directory.Build.props
+        run: |
+          VERSION="${{ needs.validate-version.outputs.version }}"
+          sed -i "s/<Version>.*<\/Version>/<Version>$VERSION<\/Version>/" Directory.Build.props
+          echo "✅ Updated version to $VERSION in Directory.Build.props"
+
+      - name: Commit version update
+        run: |
+          VERSION="${{ needs.validate-version.outputs.version }}"
+          git add Directory.Build.props
+          git commit -m "chore: bump version to $VERSION"
+          git push origin release/v$VERSION
+          echo "✅ Committed and pushed version update"
+
+  build-and-pack:
+    name: Build and Package
+    needs: [validate-version, create-release-branch]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/v${{ needs.validate-version.outputs.version }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Pack
+        run: dotnet pack --no-build --configuration Release --output ./artifacts
+
+      - name: List artifacts
+        run: |
+          echo "📦 Generated packages:"
+          ls -lh ./artifacts/*.nupkg
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./artifacts/*.nupkg
+
+      - name: Upload symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-symbols
+          path: ./artifacts/*.snupkg
+
+  publish-nuget:
+    name: Publish to NuGet
+    needs: [validate-version, build-and-pack]
+    runs-on: ubuntu-latest
+    environment:
+      name: nuget
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish to NuGet.org
+        run: |
+          for package in ./artifacts/*.nupkg; do
+            echo "📤 Publishing $package..."
+            dotnet nuget push "$package" \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done
+          echo "✅ All packages published to NuGet.org"
+
+  create-github-release:
+    name: Create GitHub Release
+    needs: [validate-version, build-and-pack, publish-nuget]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/v${{ needs.validate-version.outputs.version }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./artifacts
+
+      - name: Generate release notes
+        id: release-notes
+        run: |
+          VERSION="${{ needs.validate-version.outputs.version }}"
+          
+          echo "# Release v$VERSION" > release-notes.md
+          echo "" >> release-notes.md
+          echo "## 📦 Published Packages" >> release-notes.md
+          echo "" >> release-notes.md
+          
+          for package in ./artifacts/*.nupkg; do
+            PACKAGE_NAME=$(basename "$package" .nupkg)
+            # Extract package ID without version
+            PACKAGE_ID=$(echo "$PACKAGE_NAME" | sed -E "s/\.$VERSION//")
+            echo "- [\`$PACKAGE_ID\`](https://www.nuget.org/packages/$PACKAGE_ID/$VERSION) v$VERSION" >> release-notes.md
+          done
+          
+          echo "" >> release-notes.md
+          echo "## 📝 Installation" >> release-notes.md
+          echo "" >> release-notes.md
+          echo '```bash' >> release-notes.md
+          
+          for package in ./artifacts/*.nupkg; do
+            PACKAGE_NAME=$(basename "$package" .nupkg)
+            PACKAGE_ID=$(echo "$PACKAGE_NAME" | sed -E "s/\.$VERSION//")
+            echo "dotnet add package $PACKAGE_ID --version $VERSION" >> release-notes.md
+          done
+          
+          echo '```' >> release-notes.md
+          
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.validate-version.outputs.version }}
+          name: Release v${{ needs.validate-version.outputs.version }}
+          body_path: release-notes.md
+          files: ./artifacts/*.nupkg
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup:
+    name: Cleanup and Merge
+    needs: [validate-version, create-github-release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge release branch to main
+        run: |
+          VERSION="${{ needs.validate-version.outputs.version }}"
+          BRANCH_NAME="release/v$VERSION"
+          
+          git fetch origin
+          git checkout main
+          git pull origin main
+          git merge origin/$BRANCH_NAME --no-ff -m "chore: merge release v$VERSION into main"
+          git push origin main
+          echo "✅ Merged $BRANCH_NAME into main"
+
+      - name: Delete release branch
+        run: |
+          VERSION="${{ needs.validate-version.outputs.version }}"
+          BRANCH_NAME="release/v$VERSION"
+          
+          git push origin --delete $BRANCH_NAME
+          echo "✅ Deleted branch $BRANCH_NAME"
