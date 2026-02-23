@@ -27,6 +27,26 @@ public static class ResultExtensions
     }
 
     /// <summary>
+    /// Converts a <see cref="Result{TSource}"/> to a non-generic <see cref="Result"/>.
+    /// If the current result is a failure, the failure is propagated to the returned <see cref="Result"/>.
+    /// </summary>
+    /// <typeparam name="TSource">The source value type.</typeparam>
+    /// <param name="result">The result to convert.</param>
+    /// <returns>
+    /// A non-generic <see cref="Result"/> with success status when this result is successful;
+    /// otherwise a failed <see cref="Result"/> with the same error.
+    /// </returns>
+    public static Result Map<TSource>(this Result<TSource> result)
+    {
+        if (!result.IsSuccess)
+        {
+            return Result.Failure(result.Error!.Value);
+        }
+
+        return Result.Success();
+    }
+
+    /// <summary>
     /// Attempts to map this result to <see cref="Result{TOut}"/> without a mapping function.
     /// This overload only propagates failures — when this result is successful, calling this method
     /// is considered an invalid operation and an <see cref="InvalidOperationException"/> is thrown.
