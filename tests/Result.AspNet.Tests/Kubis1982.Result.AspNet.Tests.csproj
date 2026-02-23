@@ -16,10 +16,11 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="xunit.v3" Version="3.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Result.WolverineFx\Kubis1982.Result.WolverineFx.csproj" />
+		<ProjectReference Include="..\..\src\Result.AspNet\Kubis1982.Result.AspNet.csproj" />
 	</ItemGroup>
 
 </Project>

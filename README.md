@@ -70,6 +70,7 @@ The project includes comprehensive test suites for all packages:
 ### Test Projects
 
 - **Kubis1982.Result.Tests** - Unit tests for the core Result library
+- **Kubis1982.Result.AspNet.Tests** - Unit tests for ASP.NET Core extensions
 - **Kubis1982.Result.WolverineFx.Tests** - Integration tests for WolverineFx extensions
 
 ### Running Tests
@@ -80,8 +81,8 @@ dotnet test
 
 # Run tests for specific project
 dotnet test tests/Result.Tests/Kubis1982.Result.Tests.csproj
+dotnet test tests/Result.AspNet.Tests/Kubis1982.Result.AspNet.Tests.csproj
 dotnet test tests/Result.WolverineFx.Tests/Kubis1982.Result.WolverineFx.Tests.csproj
-
 ```
 
 ### Test Framework

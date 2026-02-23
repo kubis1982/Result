@@ -1,15 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Copyright>Copyright © 2026 Mariusz Świątnicki.</Copyright>
 		<Authors>Mariusz Świątnicki</Authors>
 		<PackageProjectUrl>https://github.com/kubis1982/Result</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/kubis1982/Result</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Version>0.5.0</Version>
+		<Version>1.0.0</Version>
 		<Description>ASP.NET Core extensions for Result, providing IResult conversions and ProblemDetails integration.</Description>
 		<PackageTags>result;aspnet;problem-details;http;results</PackageTags>		
 		<IsPackable>true</IsPackable>

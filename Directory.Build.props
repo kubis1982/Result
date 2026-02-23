@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<RootNamespace>Kubis1982.Result</RootNamespace>		
-	</PropertyGroup>	
+	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>

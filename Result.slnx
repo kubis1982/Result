@@ -14,6 +14,7 @@
     <Project Path="src/Result/Kubis1982.Result.csproj" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="tests/Result.AspNet.Tests/Kubis1982.Result.AspNet.Tests.csproj" />
     <Project Path="tests/Result.Tests/Kubis1982.Result.Tests.csproj" />
     <Project Path="tests/Result.WolverineFx.Tests/Kubis1982.Result.WolverineFx.Tests.csproj" />
   </Folder>

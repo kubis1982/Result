@@ -4,6 +4,8 @@ namespace Kubis1982.Result
 
     public record ArticleDto(int Id, string Name);
 
+    public record OrderDto(int Id, int ArticleId, int ContractorId);
+
     public class Contractor
     {
         public int Id { get; set; }
