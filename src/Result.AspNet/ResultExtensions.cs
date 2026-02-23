@@ -23,7 +23,7 @@ public static class ResultExtensions
         ArgumentNullException.ThrowIfNull(result);
 
         // Success case: Return HTTP 204 NoContent
-        if (result.IsSuccess) return Results.NoContent();
+        if (result.IsSuccess) return TypedResults.NoContent();
 
         // Error case: Map error to appropriate HTTP status code and problem details
         var error = result.Error!.Value;
@@ -49,7 +49,7 @@ public static class ResultExtensions
         ArgumentNullException.ThrowIfNull(result);
 
         // Success case: Return HTTP 200 OK with value
-        if (result.IsSuccess) return Results.Ok(result.Value);
+        if (result.IsSuccess) return TypedResults.Ok(result.Value);
 
         // Error case: Map error to appropriate HTTP status code and problem details
         var error = result.Error!.Value;
