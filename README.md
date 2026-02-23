@@ -8,7 +8,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/download)
-[![.NET CI](https://github.com/kubis1982/Result/actions/workflows/dotnet.yml/badge.svg)](https://github.com/kubis1982/Result/actions/workflows/dotnet.yml)
 [![Release](https://github.com/kubis1982/Result/actions/workflows/release.yml/badge.svg)](https://github.com/kubis1982/Result/actions/workflows/release.yml)
 
 </div>
