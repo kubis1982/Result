@@ -6,7 +6,8 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<Version>1.1.0</Version>
+		<PackageIcon>icon.png</PackageIcon>
+		<Version>1.2.0</Version>
 		<Description>WolverineFx extensions for Result, providing message-handling and middleware integrations for WolverineFx.</Description>
 		<PackageTags>result;wolverinefx;wolverine;messaging;extensions</PackageTags>
 		<IsPackable>true</IsPackable>
@@ -19,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="WolverineFx" Version="5.16.2" />
+	  <PackageReference Include="WolverineFx" Version="5.10.0" />
 	</ItemGroup>
 
 	<ItemGroup>
