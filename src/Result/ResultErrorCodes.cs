@@ -6,17 +6,17 @@ namespace kubis1982.Result;
 public static class ResultErrorCodes
 {
     /// <summary>Not found error code.</summary>
-    public const string NotFound = "general.notfound";
+    public const string NotFound = "GENERAL.NOTFOUND";
 
     /// <summary>Conflict error code.</summary>
-    public const string Conflict = "general.conflict";
+    public const string Conflict = "GENERAL.CONFLICT";
 
     /// <summary>Forbidden error code.</summary>
-    public const string Forbidden = "general.forbidden";
+    public const string Forbidden = "GENERAL.FORBIDDEN";
 
     /// <summary>Unauthorized error code.</summary>
-    public const string Unauthorized = "general.unauthorized";
+    public const string Unauthorized = "GENERAL.UNAUTHORIZED";
 
     /// <summary>Validation error code.</summary>
-    public const string Validation = "general.validation";
+    public const string Validation = "GENERAL.VALIDATION";
 }

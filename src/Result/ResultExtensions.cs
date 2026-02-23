@@ -1,7 +1,5 @@
 namespace kubis1982.Result;
 
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 public static class ResultExtensions
 {
     #region Mapping
