@@ -34,20 +34,18 @@ namespace Kubis1982.Result
             if (!type.IsGenericType)
                 return type.FullName ?? type.Name;
 
-            var namePrefix =
-                (type.GetGenericTypeDefinition().FullName ?? type.Name).Split('`',
-                    StringSplitOptions.RemoveEmptyEntries)[0];
+            var namePrefix =  (type.GetGenericTypeDefinition().FullName ?? type.Name).Split('`', StringSplitOptions.RemoveEmptyEntries)[0];
             var genericParameters = string.Join(",", type.GetGenericArguments().Select(GetFriendlyTypeName));
             return namePrefix + "<" + genericParameters + ">";
         }
         
-        private Type? GetHandlerReturnType(MethodCall call)
+        private static Type? GetHandlerReturnType(MethodCall call)
         {
-            var returnType = call.HandlerType.GetMethods()
-                .FirstOrDefault(m => m.Name.EndsWith("Handle") || m.Name.EndsWith("HandleAsync"))?.ReturnType;
+            var returnType = call.HandlerType.GetMethods().FirstOrDefault(m => m.Name.EndsWith("Handle") || m.Name.EndsWith("HandleAsync"))?.ReturnType;
 
             if (returnType?.GetGenericTypeDefinition() == typeof(Task<>))
                 returnType = returnType.GetGenericArguments().FirstOrDefault();
+           
             return returnType;
         }
 
@@ -106,11 +104,11 @@ namespace Kubis1982.Result
                 writer.BlankLine();
                 writer.WriteComment("Result continuation check for Result types");
 
-                writer.Write($"BLOCK:if ({_result.Usage}.IsError())");
+                writer.Write($"BLOCK:if ({_result.Usage}.IsSuccess == false)");
                 if (_handlerReturnType != null)
                     writer.Write(
                         _handlerReturnType != _result.VariableType
-                            ? $"await context.EnqueueCascadingAsync({GetFriendlyTypeName(_handlerReturnType)}.Error({_result.Usage}.ErrorValue)).ConfigureAwait(false);"
+                            ? $"await context.EnqueueCascadingAsync(({GetFriendlyTypeName(_handlerReturnType)}){_result.Usage}.Error!).ConfigureAwait(false);"
                             : $"await context.EnqueueCascadingAsync({_result.Usage}).ConfigureAwait(false);");
                 writer.Write("return;");
                 writer.FinishBlock();
@@ -149,11 +147,11 @@ namespace Kubis1982.Result
                 writer.BlankLine();
                 writer.WriteComment("Result continuation check for Result<T> types");
 
-                writer.Write($"BLOCK:if ({_result.Usage}.IsError())");
+                writer.Write($"BLOCK:if ({_result.Usage}.IsSuccess == false)");
                 if (_handlerReturnType != null)
                     writer.Write(
                         _handlerReturnType != _result.VariableType
-                            ? $"await context.EnqueueCascadingAsync({GetFriendlyTypeName(_handlerReturnType)}.Error({_result.Usage}.ErrorValue)).ConfigureAwait(false);"
+                            ? $"await context.EnqueueCascadingAsync(({GetFriendlyTypeName(_handlerReturnType)}){_result.Usage}.Error!).ConfigureAwait(false);"
                             : $"await context.EnqueueCascadingAsync({_result.Usage}).ConfigureAwait(false);");
                 writer.Write("return;");
                 writer.FinishBlock();

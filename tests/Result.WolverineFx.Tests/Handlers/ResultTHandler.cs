@@ -1,5 +1,7 @@
 namespace Kubis1982.Result.Handlers
 {
+    using Wolverine;
+
     public static class ResultTHandler
     {
         public static Task<Result<Contractor>> LoadAsync(ResultTCommand command)
@@ -15,6 +17,11 @@ namespace Kubis1982.Result.Handlers
         {
             var contractorDto = new ContractorDto(contractor.Id, contractor.Name);
             return Task.FromResult(Result.Success(contractorDto));
+        }
+
+        public static Task<Result<ContractorDto>> InvokeAsync(this ResultTCommand command, IMessageBus messageBus, CancellationToken cancellationToken)
+        {
+            return messageBus.InvokeAsync<Result<ContractorDto>>(command, cancellationToken);
         }
     }
 }
