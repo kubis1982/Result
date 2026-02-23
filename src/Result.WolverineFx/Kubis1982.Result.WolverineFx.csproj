@@ -1,10 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Authors>Mariusz Świątnicki</Authors>
-		<PackageProjectUrl>https://github.com/kubis1982/Result</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/kubis1982/Result</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<Version>1.2.0</Version>
