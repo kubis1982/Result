@@ -9,12 +9,12 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Source/">
-    <Project Path="src/Result.AspNet/Result.AspNet.csproj" />
-    <Project Path="src/Result.WolverineFx/Result.WolverineFx.csproj" />
-    <Project Path="src/Result/Result.csproj" />
+    <Project Path="src/Result.AspNet/Kubis1982.Result.AspNet.csproj" />
+    <Project Path="src/Result.WolverineFx/Kubis1982.Result.WolverineFx.csproj" />
+    <Project Path="src/Result/Kubis1982.Result.csproj" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="tests/Result.Tests/Result.Tests.csproj" />
-    <Project Path="tests/Result.WolverineFx.Tests/Result.WolverineFx.Tests.csproj" />
+    <Project Path="tests/Result.Tests/Kubis1982.Result.Tests.csproj" />
+    <Project Path="tests/Result.WolverineFx.Tests/Kubis1982.Result.WolverineFx.Tests.csproj" />
   </Folder>
 </Solution>
