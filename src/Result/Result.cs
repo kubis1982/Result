@@ -9,7 +9,7 @@ public partial class Result
     /// <summary>
     /// Indicates whether the result is a success.
     /// </summary>
-    public bool IsSuccess { get; }
+    public bool IsSuccess => Error == null;
 
     /// <summary>
     /// When the result represents a failure, contains the <see cref="ResultError"/> describing the failure; otherwise null.
@@ -19,11 +19,16 @@ public partial class Result
     /// <summary>
     /// Protected constructor used by factory methods and derived types.
     /// </summary>
-    /// <param name="isSuccess">Whether the result is success.</param>
-    /// <param name="error">Optional error information for failure results.</param>
-    protected Result(bool isSuccess, ResultError? error = null)
+    private protected Result()
     {
-        IsSuccess = isSuccess;
+    }
+
+    /// <summary>
+    /// Protected constructor used by factory methods and derived types.
+    /// </summary>
+    /// <param name="error">Error information for failure results.</param>
+    private protected Result(ResultError error)
+    {
         Error = error;
     }
 }
@@ -35,7 +40,7 @@ partial class Result
     /// <summary>
     /// Creates a non-generic successful result.
     /// </summary>
-    public static Result Success() => new(true);
+    public static Result Success() => new();
 
     /// <summary>
     /// Creates a generic successful result wrapping a value of <typeparamref name="T"/>.
@@ -45,7 +50,7 @@ partial class Result
     /// <summary>
     /// Creates a non-generic failure result with the provided <see cref="ResultError"/>.
     /// </summary>
-    public static Result Failure(ResultError error) => new(false, error);
+    public static Result Failure(ResultError error) => new(error);
 
     /// <summary>
     /// Creates a generic failure result of type <typeparamref name="T"/> with the provided <see cref="ResultError"/>.

@@ -40,7 +40,6 @@ public class ResultTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal(42, result.Value);
-        Assert.Equal(42, result.ValueOrDefault);
     }
 
     [Fact]
@@ -67,7 +66,7 @@ public class ResultTests
     public void Value_OnFailureResult_ThrowsResultException()
     {
         var error = ResultError.NotFound("not found");
-        var result = Result<int>.Failure(error);
+        var result = Result.Failure<int>(error);
 
         var ex = Assert.Throws<ResultException>(() => _ = result.Value);
 
@@ -92,26 +91,5 @@ public class ResultTests
 
         Assert.False(result.IsSuccess);
         Assert.Equal(error, result.Error);
-    }
-
-    [Fact]
-    public void ValueOrDefault_OnSuccessResult_ReturnsValue()
-    {
-        var result = Result<string>.Success("abc");
-
-        var value = result.ValueOrDefault;
-
-        Assert.Equal("abc", value);
-    }
-
-    [Fact]
-    public void ValueOrDefault_OnFailureResult_ReturnsDefault()
-    {
-        var error = ResultError.Custom("E2", "failed");
-        var result = Result<string>.Failure(error);
-
-        var value = result.ValueOrDefault;
-
-        Assert.Null(value);
     }
 }

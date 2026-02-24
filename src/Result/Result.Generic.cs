@@ -4,17 +4,20 @@ namespace Kubis1982.Result;
 /// Represents the result of an operation that produces a value of type <typeparamref name="T"/> on success.
 /// Inherits from <see cref="Result"/>.
 /// </summary>
-public partial class Result<T> : Result
+public sealed partial class Result<T> : Result
 {
-    private readonly T? _value;
+    private readonly T? _value = default;
 
     /// <summary>
     /// Internal constructor used by factory methods.
     /// </summary>
-    internal Result(bool isSuccess, T? value, ResultError? error = null)
-        : base(isSuccess, error)
+    private Result(T? value) : base()
     {
         _value = value;
+    }
+
+    private Result(ResultError error) : base(error)
+    {
     }
 
     /// <summary>
@@ -28,30 +31,25 @@ public partial class Result<T> : Result
             {
                 throw new ResultException(Error!.Value);
             }
+
             return _value!;
         }
     }
-
-    /// <summary>
-    /// Returns the contained value when successful, otherwise the default value for <typeparamref name="T"/>.
-    /// </summary>
-    public T? ValueOrDefault => IsSuccess ? _value : default;
 }
-
 
 partial class Result<T>
 {
     #region Factory Methods
-
+    
     /// <summary>
     /// Creates a successful <see cref="Result{T}"/> containing the provided value.
     /// </summary>
-    public static Result<T> Success(T value) => new(true, value);
+    public static Result<T> Success(T value) => new(value);
 
     /// <summary>
     /// Creates a failed <see cref="Result{T}"/> with the provided <see cref="ResultError"/>.
     /// </summary>
-    public new static Result<T> Failure(ResultError error) => new(false, default, error);
+    public new static Result<T> Failure(ResultError error) => new(error);
 
     #endregion
 
