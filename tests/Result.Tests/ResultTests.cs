@@ -35,7 +35,7 @@ public class ResultTests
     [Fact]
     public void Success_WithValue_ReturnsSuccessWithValue()
     {
-        var result = Result<int>.Success(42);
+        var result = Result.Success(42);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(42, result.Value);
@@ -44,7 +44,7 @@ public class ResultTests
     [Fact]
     public void ExplicitOperator_OnSuccessResult_ReturnsValue()
     {
-        var result = Result<int>.Success(42);
+        var result = Result.Success(42);
 
         int value = (int)result;
 
@@ -55,7 +55,7 @@ public class ResultTests
     public void Failure_WithError_ReturnsFailureResult()
     {
         var error = Error.NotFound("not found");
-        var result = Result<int>.Failure(error);
+        var result = Result.Failure<int>(error);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(error, result.Error);

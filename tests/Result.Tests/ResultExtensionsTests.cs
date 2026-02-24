@@ -49,7 +49,7 @@ public class ResultExtensionsTests
     [Fact]
     public void Map_WithMapper_CanMapToComplexType()
     {
-        var result = Result<int>.Success(42);
+        var result = Result.Success(42);
 
         var mapped = result.Map(x => new { Value = x, DoubleValue = x * 2 });
 
@@ -218,9 +218,9 @@ public class ResultExtensionsTests
         var result = Result<int>.Success(10);
 
         var bound = result
-            .Bind(x => Result<int>.Success(x * 2))
-            .Bind(x => Result<int>.Success(x + 5))
-            .Bind(x => Result<string>.Success(x.ToString()));
+            .Bind(x => Result.Success(x * 2))
+            .Bind(x => Result.Success(x + 5))
+            .Bind(x => Result.Success(x.ToString()));
 
         Assert.True(bound.IsSuccess);
         Assert.Equal("25", bound.Value);
@@ -229,7 +229,7 @@ public class ResultExtensionsTests
     [Fact]
     public void Bind_WithBinder_ChainStopsAtFirstFailure()
     {
-        var result = Result<int>.Success(10);
+        var result = Result.Success(10);
         var error = Error.Validation("failed");
 
         var bound = result
@@ -270,7 +270,7 @@ public class ResultExtensionsTests
     [Fact]
     public void Bind_ToNonGeneric_CanReturnFailureFromBinder()
     {
-        var result = Result<int>.Success(42);
+        var result = Result.Success(42);
         var binderError = Error.Unauthorized("unauthorized");
 
         var bound = result.Bind(x => Result.Failure(binderError));
@@ -305,7 +305,7 @@ public class ResultExtensionsTests
     {
         var result = Result.Success();
 
-        var bound = result.Bind(() => Result<string>.Success("hello"));
+        var bound = result.Bind(() => Result.Success("hello"));
 
         Assert.True(bound.IsSuccess);
         Assert.Equal("hello", bound.Value);
@@ -317,7 +317,7 @@ public class ResultExtensionsTests
         var error = Error.Forbidden("access denied");
         var result = Result.Failure(error);
 
-        var bound = result.Bind(() => Result<string>.Success("hello"));
+        var bound = result.Bind(() => Result.Success("hello"));
 
         Assert.False(bound.IsSuccess);
         Assert.Equal(error, bound.Error);
@@ -329,7 +329,7 @@ public class ResultExtensionsTests
         var result = Result.Success();
         var binderError = Error.NotFound("not found");
 
-        var bound = result.Bind(() => Result<int>.Failure(binderError));
+        var bound = result.Bind(() => Result.Failure(binderError));
 
         Assert.False(bound.IsSuccess);
         Assert.Equal(binderError, bound.Error);
@@ -345,7 +345,7 @@ public class ResultExtensionsTests
         var bound = result.Bind(() =>
         {
             binderCalled = true;
-            return Result<string>.Success("value");
+            return Result.Success("value");
         });
 
         Assert.False(binderCalled);
