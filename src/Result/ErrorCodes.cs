@@ -1,9 +1,9 @@
 namespace Kubis1982.Result;
 
 /// <summary>
-/// Common error code constants used when creating <see cref="ResultError"/> instances.
+/// Common error code constants used when creating <see cref="Error"/> instances.
 /// </summary>
-public static class ResultErrorCodes
+public static class ErrorCodes
 {
     /// <summary>Not found error code.</summary>
     public const string NotFound = "GENERAL.NOTFOUND";

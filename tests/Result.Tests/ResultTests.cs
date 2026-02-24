@@ -10,13 +10,12 @@ public class ResultTests
         var result = Result.Success();
 
         Assert.True(result.IsSuccess);
-        Assert.Null(result.Error);
     }
 
     [Fact]
     public void Failure_WithError_ReturnsFailureWithError()
     {
-        var error = ResultError.Custom("E001", "failure");
+        var error = Error.Validation("E001", "failure");
         var result = Result.Failure(error);
 
         Assert.False(result.IsSuccess);
@@ -26,7 +25,7 @@ public class ResultTests
     [Fact]
     public void ImplicitOperator_FromError_ReturnsFailureResult()
     {
-        var error = ResultError.Validation("bad");
+        var error = Error.Validation("bad");
         Result result = error;
 
         Assert.False(result.IsSuccess);
@@ -55,7 +54,7 @@ public class ResultTests
     [Fact]
     public void Failure_WithError_ReturnsFailureResult()
     {
-        var error = ResultError.NotFound("not found");
+        var error = Error.NotFound("not found");
         var result = Result<int>.Failure(error);
 
         Assert.False(result.IsSuccess);
@@ -65,7 +64,7 @@ public class ResultTests
     [Fact]
     public void Value_OnFailureResult_ThrowsResultException()
     {
-        var error = ResultError.NotFound("not found");
+        var error = Error.NotFound("not found");
         var result = Result.Failure<int>(error);
 
         var ex = Assert.Throws<ResultException>(() => _ = result.Value);
@@ -85,7 +84,7 @@ public class ResultTests
     [Fact]
     public void ImplicitOperatorGeneric_FromError_ReturnsFailureResult()
     {
-        var error = ResultError.Forbidden("no");
+        var error = Error.Forbidden("no");
 
         Result<int> result = error;
 

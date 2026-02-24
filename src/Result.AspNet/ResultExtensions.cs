@@ -26,9 +26,9 @@ public static class ResultExtensions
         if (result.IsSuccess) return TypedResults.NoContent();
 
         // Error case: Map error to appropriate HTTP status code and problem details
-        var error = result.Error!.Value;
-        var statusCode = GetStatusCode(error.Code);
-        var title = GetTitle(error.Code);
+        var error = result.Error;
+        var statusCode = GetStatusCode(error.ErrorType);
+        var title = GetTitle(error.ErrorType);
 
         return Results.Problem(detail: error.Description, statusCode: statusCode, title: title, type: error.Code);
     }
@@ -52,9 +52,9 @@ public static class ResultExtensions
         if (result.IsSuccess) return TypedResults.Ok(result.Value);
 
         // Error case: Map error to appropriate HTTP status code and problem details
-        var error = result.Error!.Value;
-        var statusCode = GetStatusCode(error.Code);
-        var title = GetTitle(error.Code);
+        var error = result.Error;
+        var statusCode = GetStatusCode(error.ErrorType);
+        var title = GetTitle(error.ErrorType);
 
         return Results.Problem(detail: error.Description, statusCode: statusCode, title: title, type: error.Code);
     }
@@ -63,15 +63,15 @@ public static class ResultExtensions
     /// Maps error codes to appropriate HTTP status codes.
     /// Provides standard HTTP status code mapping for common business logic error types.
     /// </summary>
-    /// <param name="code">The error code to map.</param>
+    /// <param name="errorType">The error type to map.</param>
     /// <returns>The corresponding HTTP status code.</returns>
-    private static int GetStatusCode(string code) => code switch
+    private static int GetStatusCode(ErrorType errorType) => errorType switch
     {
-        ResultErrorCodes.NotFound => StatusCodes.Status404NotFound,         // 404
-        ResultErrorCodes.Conflict => StatusCodes.Status409Conflict,         // 409
-        ResultErrorCodes.Forbidden => StatusCodes.Status403Forbidden,       // 403
-        ResultErrorCodes.Unauthorized => StatusCodes.Status401Unauthorized, // 401
-        ResultErrorCodes.Validation => StatusCodes.Status422UnprocessableEntity, // 422
+        ErrorType.NotFound => StatusCodes.Status404NotFound,         // 404
+        ErrorType.Conflict => StatusCodes.Status409Conflict,         // 409
+        ErrorType.Forbidden => StatusCodes.Status403Forbidden,       // 403
+        ErrorType.Unauthorized => StatusCodes.Status401Unauthorized, // 401
+        ErrorType.Validation => StatusCodes.Status422UnprocessableEntity, // 422
         _ => StatusCodes.Status400BadRequest                                 // 400 (default)
     };
 
@@ -79,15 +79,15 @@ public static class ResultExtensions
     /// Maps error codes to human-readable titles for HTTP Problem Details.
     /// Provides standardized error titles that correspond to HTTP status codes.
     /// </summary>
-    /// <param name="code">The error code to map.</param>
+    /// <param name="errorType">The error type to map.</param>
     /// <returns>The corresponding human-readable title.</returns>
-    private static string GetTitle(string code) => code switch
+    private static string GetTitle(ErrorType errorType) => errorType switch
     {
-        ResultErrorCodes.NotFound => "Not Found",
-        ResultErrorCodes.Conflict => "Conflict",
-        ResultErrorCodes.Forbidden => "Forbidden",
-        ResultErrorCodes.Unauthorized => "Unauthorized",
-        ResultErrorCodes.Validation => "Validation Error",
+        ErrorType.NotFound => "Not Found",
+        ErrorType.Conflict => "Conflict",
+        ErrorType.Forbidden => "Forbidden",
+        ErrorType.Unauthorized => "Unauthorized",
+        ErrorType.Validation => "Validation Error",
         _ => "Bad Request"
     };
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.ObjectPool;
 using Xunit;
 
 namespace Kubis1982.Result;
@@ -63,21 +64,27 @@ public class ResultExtensionsTests
 
     #region Failure Tests - Non-Generic
 
+    public static TheoryData<Error, int, string> GetErrorTestData()
+    {
+        return new TheoryData<Error, int, string>
+        {
+            { Error.NotFound("Not Found"), StatusCodes.Status404NotFound, "Not Found" },
+            { Error.Conflict("Conflict"), StatusCodes.Status409Conflict, "Conflict" },
+            { Error.Forbidden("Forbidden"), StatusCodes.Status403Forbidden, "Forbidden" },
+            { Error.Unauthorized("Unauthorized"), StatusCodes.Status401Unauthorized, "Unauthorized" },
+            { Error.Validation("Validation Error"), StatusCodes.Status422UnprocessableEntity, "Validation Error" }
+        };
+    }
+
+
     [Theory]
-    [InlineData(ResultErrorCodes.NotFound, StatusCodes.Status404NotFound, "Not Found")]
-    [InlineData(ResultErrorCodes.Conflict, StatusCodes.Status409Conflict, "Conflict")]
-    [InlineData(ResultErrorCodes.Forbidden, StatusCodes.Status403Forbidden, "Forbidden")]
-    [InlineData(ResultErrorCodes.Unauthorized, StatusCodes.Status401Unauthorized, "Unauthorized")]
-    [InlineData(ResultErrorCodes.Validation, StatusCodes.Status422UnprocessableEntity, "Validation Error")]
-    [InlineData("UNKNOWN_CODE", StatusCodes.Status400BadRequest, "Bad Request")]
+    [MemberData(nameof(GetErrorTestData), DisableDiscoveryEnumeration = true)]
     public void ToResult_WithFailureResult_ReturnsProblemDetailsWithCorrectStatusAndTitle(
-        string errorCode,
+        Error error,
         int expectedStatusCode,
         string expectedTitle)
     {
         // Arrange
-        var errorDescription = "Test error description";
-        var error = new ResultError(errorCode, errorDescription);
         var result = Result.Failure(error);
 
         // Act
@@ -90,8 +97,8 @@ public class ResultExtensionsTests
         Assert.Equal(expectedStatusCode, problemResult.StatusCode);
         Assert.Equal(expectedStatusCode, problemResult.ProblemDetails.Status);
         Assert.Equal(expectedTitle, problemResult.ProblemDetails.Title);
-        Assert.Equal(errorDescription, problemResult.ProblemDetails.Detail);
-        Assert.Equal(errorCode, problemResult.ProblemDetails.Type);
+        Assert.Equal(error.Description, problemResult.ProblemDetails.Detail);
+        Assert.Equal(error.Code, problemResult.ProblemDetails.Type);
     }
 
     #endregion
@@ -99,20 +106,13 @@ public class ResultExtensionsTests
     #region Failure Tests - Generic
 
     [Theory]
-    [InlineData(ResultErrorCodes.NotFound, StatusCodes.Status404NotFound, "Not Found")]
-    [InlineData(ResultErrorCodes.Conflict, StatusCodes.Status409Conflict, "Conflict")]
-    [InlineData(ResultErrorCodes.Forbidden, StatusCodes.Status403Forbidden, "Forbidden")]
-    [InlineData(ResultErrorCodes.Unauthorized, StatusCodes.Status401Unauthorized, "Unauthorized")]
-    [InlineData(ResultErrorCodes.Validation, StatusCodes.Status422UnprocessableEntity, "Validation Error")]
-    [InlineData("UNKNOWN_CODE", StatusCodes.Status400BadRequest, "Bad Request")]
+    [MemberData(nameof(GetErrorTestData), DisableDiscoveryEnumeration = true)]
     public void ToResult_WithFailureResultT_ReturnsProblemDetailsWithCorrectStatusAndTitle(
-        string errorCode,
+        Error error,
         int expectedStatusCode,
         string expectedTitle)
     {
         // Arrange
-        var errorDescription = "Test error description for generic result";
-        var error = new ResultError(errorCode, errorDescription);
         var result = Result.Failure<int>(error);
 
         // Act
@@ -125,8 +125,8 @@ public class ResultExtensionsTests
         Assert.Equal(expectedStatusCode, problemResult.StatusCode);
         Assert.Equal(expectedStatusCode, problemResult.ProblemDetails.Status);
         Assert.Equal(expectedTitle, problemResult.ProblemDetails.Title);
-        Assert.Equal(errorDescription, problemResult.ProblemDetails.Detail);
-        Assert.Equal(errorCode, problemResult.ProblemDetails.Type);
+        Assert.Equal(error.Description, problemResult.ProblemDetails.Detail);
+        Assert.Equal(error.Code, problemResult.ProblemDetails.Type);
     }
 
     #endregion

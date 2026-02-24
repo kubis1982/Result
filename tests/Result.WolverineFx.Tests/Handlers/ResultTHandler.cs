@@ -8,7 +8,7 @@ namespace Kubis1982.Result.Handlers
         {
             var contractor = Repository.Contractors.FirstOrDefault(u => u.Id == command.ContractorId);
 
-            if (contractor == null) return Task.FromResult((Result<Contractor>)ResultError.NotFound("Contractor not found"));
+            if (contractor == null) return Task.FromResult((Result<Contractor>)Error.NotFound("Contractor not found"));
 
             return Task.FromResult(Result.Success(contractor));
         }

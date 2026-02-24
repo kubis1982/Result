@@ -9,12 +9,12 @@ public partial class Result
     /// <summary>
     /// Indicates whether the result is a success.
     /// </summary>
-    public bool IsSuccess => Error == null;
+    public bool IsSuccess => Error.ErrorType == ErrorType.None;
 
     /// <summary>
-    /// When the result represents a failure, contains the <see cref="ResultError"/> describing the failure; otherwise null.
+    /// Contains the <see cref="Kubis1982.Result.Error"/> describing the failure when <see cref="IsSuccess"/> is false; otherwise contains an error with <see cref="ErrorType.None"/>.
     /// </summary>
-    public ResultError? Error { get; }
+    public Error Error { get; }
 
     /// <summary>
     /// Protected constructor used by factory methods and derived types.
@@ -27,7 +27,7 @@ public partial class Result
     /// Protected constructor used by factory methods and derived types.
     /// </summary>
     /// <param name="error">Error information for failure results.</param>
-    private protected Result(ResultError error)
+    private protected Result(Error error)
     {
         Error = error;
     }
@@ -45,27 +45,32 @@ partial class Result
     /// <summary>
     /// Creates a generic successful result wrapping a value of <typeparamref name="T"/>.
     /// </summary>
-    public static Result<T> Success<T>(T value) => Result<T>.Success(value);
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="value">The value to wrap in the result.</param>
+    public static Result<T> Success<T>(T value) => new(value);
 
     /// <summary>
-    /// Creates a non-generic failure result with the provided <see cref="ResultError"/>.
+    /// Creates a non-generic failure result with the provided <see cref="Kubis1982.Result.Error"/>.
     /// </summary>
-    public static Result Failure(ResultError error) => new(error);
+    /// <param name="error">The error describing the failure.</param>
+    public static Result Failure(Error error) => new(error);
 
     /// <summary>
-    /// Creates a generic failure result of type <typeparamref name="T"/> with the provided <see cref="ResultError"/>.
+    /// Creates a generic failure result of type <typeparamref name="T"/> with the provided <see cref="Kubis1982.Result.Error"/>.
     /// </summary>
-    public static Result<T> Failure<T>(ResultError error) => Result<T>.Failure(error);
+    /// <typeparam name="T">The type of the value that would be returned on success.</typeparam>
+    /// <param name="error">The error describing the failure.</param>
+    public static Result<T> Failure<T>(Error error) => new(error);
 
     #endregion
 
     #region Operators
 
     /// <summary>
-    /// Allows implicit conversion from <see cref="ResultError"/> to <see cref="Result"/>, producing a failure result.
+    /// Allows implicit conversion from <see cref="Kubis1982.Result.Error"/> to <see cref="Result"/>, producing a failure result.
     /// </summary>
     /// <param name="error">The error to convert.</param>
-    public static implicit operator Result(ResultError error) => Failure(error);
+    public static implicit operator Result(Error error) => Failure(error);
 
     #endregion
 }

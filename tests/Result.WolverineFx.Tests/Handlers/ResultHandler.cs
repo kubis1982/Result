@@ -10,7 +10,7 @@ namespace Kubis1982.Result.Handlers
         {
             var contractor = Repository.Contractors.FirstOrDefault(u => u.Id == command.ContractorId);
 
-            if (contractor == null) return ResultError.NotFound(ContractorNotFoundMessage);
+            if (contractor == null) return Error.NotFound(ContractorNotFoundMessage);
 
             return Result.Success();
         }

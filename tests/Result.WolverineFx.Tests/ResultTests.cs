@@ -53,8 +53,8 @@ namespace Kubis1982.Result
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Equal(ResultErrorCodes.NotFound, result.Error!.Value.Code);
-            Assert.Equal(ResultHandler.ContractorNotFoundMessage, result.Error!.Value.Description);
+            Assert.Equal(ErrorCodes.NotFound, result.Error.Code);
+            Assert.Equal(ResultHandler.ContractorNotFoundMessage, result.Error.Description);
         }
     }
 }

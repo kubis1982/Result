@@ -20,7 +20,7 @@ public static class ResultExtensions
     {
         if (!result.IsSuccess)
         {
-            return Result<TOut>.Failure(result.Error!.Value);
+            return Result.Failure<TOut>(result.Error);
         }
 
         return Result<TOut>.Success(mapper(result.Value));
@@ -40,7 +40,7 @@ public static class ResultExtensions
     {
         if (!result.IsSuccess)
         {
-            return Result.Failure(result.Error!.Value);
+            return Result.Failure(result.Error);
         }
 
         return Result.Success();
@@ -52,6 +52,7 @@ public static class ResultExtensions
     /// If the current result is successful, returns a successful <see cref="Result{TOut}"/> containing the default value of <typeparamref name="TOut"/>.
     /// </summary>
     /// <typeparam name="TOut">The target value type.</typeparam>
+    /// <param name="result">The source result.</param>
     /// <returns>
     /// A <see cref="Result{TOut}"/> containing the default value when this result is successful;
     /// otherwise a failed <see cref="Result{TOut}"/> with the same error.
@@ -60,10 +61,10 @@ public static class ResultExtensions
     {
         if (!result.IsSuccess)
         {
-            return Result<TOut>.Failure(result.Error!.Value);
+            return Result.Failure<TOut>(result.Error);
         }
 
-        return Result<TOut>.Success(default!);
+        return Result.Success<TOut>(default!);
     }
 
     #endregion

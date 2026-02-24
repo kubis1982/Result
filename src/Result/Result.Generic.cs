@@ -8,16 +8,13 @@ public sealed partial class Result<T> : Result
 {
     private readonly T? _value = default;
 
-    /// <summary>
-    /// Internal constructor used by factory methods.
-    /// </summary>
-    private Result(T? value) : base()
+    internal Result(Error error) : base(error)
     {
-        _value = value;
     }
 
-    private Result(ResultError error) : base(error)
+    internal Result(T value) : base()
     {
+        _value = value;
     }
 
     /// <summary>
@@ -29,7 +26,7 @@ public sealed partial class Result<T> : Result
         {
             if (!IsSuccess)
             {
-                throw new ResultException(Error!.Value);
+                throw new ResultException(Error);
             }
 
             return _value!;
@@ -39,36 +36,25 @@ public sealed partial class Result<T> : Result
 
 partial class Result<T>
 {
-    #region Factory Methods
-    
-    /// <summary>
-    /// Creates a successful <see cref="Result{T}"/> containing the provided value.
-    /// </summary>
-    public static Result<T> Success(T value) => new(value);
-
-    /// <summary>
-    /// Creates a failed <see cref="Result{T}"/> with the provided <see cref="ResultError"/>.
-    /// </summary>
-    public new static Result<T> Failure(ResultError error) => new(error);
-
-    #endregion
-
     #region Operators
 
     /// <summary>
-    /// Implicitly convert a value of <typeparamref name="T"/> into a successful <see cref="Result{T}"/>.
+    /// Implicitly converts a value of <typeparamref name="T"/> into a successful <see cref="Result{T}"/>.
     /// </summary>
-    public static implicit operator Result<T>(T value) => Success(value);
+    /// <param name="value">The value to wrap in a successful result.</param>
+    public static implicit operator Result<T>(T value) => new(value);
 
     /// <summary>
-    /// Implicitly convert a <see cref="ResultError"/> into a failed <see cref="Result{T}"/>.
+    /// Implicitly converts an <see cref="Error"/> into a failed <see cref="Result{T}"/>.
     /// </summary>
-    public static implicit operator Result<T>(ResultError error) => Failure(error);
+    /// <param name="error">The error to convert into a failed result.</param>
+    public static implicit operator Result<T>(Error error) => new(error);
 
     /// <summary>
-    /// Explicitly extract the value from a successful <see cref="Result{T}"/>.
+    /// Explicitly extracts the value from a successful <see cref="Result{T}"/>.
     /// Throws <see cref="ResultException"/> if the result is a failure.
     /// </summary>
+    /// <param name="result">The result to extract the value from.</param>
     public static explicit operator T(Result<T> result) => result.Value;
 
     #endregion

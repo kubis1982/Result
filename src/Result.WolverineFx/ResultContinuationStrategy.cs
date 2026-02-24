@@ -7,8 +7,20 @@ namespace Kubis1982.Result
     using Wolverine.Configuration;
     using Wolverine.Middleware;
 
+    /// <summary>
+    /// Implements a continuation strategy for Wolverine that handles <see cref="Result"/> and <see cref="Result{T}"/> return types.
+    /// When a handler returns a failed result, it automatically enqueues cascading messages and terminates the handler chain.
+    /// </summary>
     public class ResultContinuationStrategy : IContinuationStrategy
     {
+        /// <summary>
+        /// Attempts to find a continuation handler for the given method call.
+        /// Looks for <see cref="Result"/> or <see cref="Result{T}"/> return types and creates appropriate continuation frames.
+        /// </summary>
+        /// <param name="chain">The handler chain being processed.</param>
+        /// <param name="call">The method call to analyze.</param>
+        /// <param name="frame">The generated continuation frame if successful; otherwise null.</param>
+        /// <returns>True if a continuation handler was found; otherwise false.</returns>
         public bool TryFindContinuationHandler(IChain chain, MethodCall call, out Frame? frame)
         {
             var result = call.Creates.FirstOrDefault(x => x.VariableType == typeof(Result));
