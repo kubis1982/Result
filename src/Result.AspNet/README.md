@@ -29,7 +29,7 @@ app.MapGet("/users/id", (int id) => userService.GetUser(id).ToResult());
 ## Error Mapping
 
 - NOT_FOUND -> 404
-- VALIDATION_ERROR -> 400
+- VALIDATION_ERROR -> 422
 - UNAUTHORIZED -> 401
 - FORBIDDEN -> 403
 - CONFLICT -> 409
