@@ -24,7 +24,7 @@ public sealed partial class Result<T> : Result
     {
         get
         {
-            if (!IsSuccess)
+            if (IsFailure)
             {
                 throw new ResultException(Error);
             }
