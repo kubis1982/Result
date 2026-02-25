@@ -116,11 +116,11 @@ namespace Kubis1982.Result
                 writer.BlankLine();
                 writer.WriteComment("Result continuation check for Result types");
 
-                writer.Write($"BLOCK:if ({_result.Usage}.IsSuccess == false)");
+                writer.Write($"BLOCK:if ({_result.Usage}.IsFailure)");
                 if (_handlerReturnType != null)
                     writer.Write(
                         _handlerReturnType != _result.VariableType
-                            ? $"await context.EnqueueCascadingAsync(({GetFriendlyTypeName(_handlerReturnType)}){_result.Usage}.Error!).ConfigureAwait(false);"
+                            ? $"await context.EnqueueCascadingAsync(({GetFriendlyTypeName(_handlerReturnType)}){_result.Usage}.Error).ConfigureAwait(false);"
                             : $"await context.EnqueueCascadingAsync({_result.Usage}).ConfigureAwait(false);");
                 writer.Write("return;");
                 writer.FinishBlock();
@@ -159,11 +159,11 @@ namespace Kubis1982.Result
                 writer.BlankLine();
                 writer.WriteComment("Result continuation check for Result<T> types");
 
-                writer.Write($"BLOCK:if ({_result.Usage}.IsSuccess == false)");
+                writer.Write($"BLOCK:if ({_result.Usage}.IsFailure)");
                 if (_handlerReturnType != null)
                     writer.Write(
                         _handlerReturnType != _result.VariableType
-                            ? $"await context.EnqueueCascadingAsync(({GetFriendlyTypeName(_handlerReturnType)}){_result.Usage}.Error!).ConfigureAwait(false);"
+                            ? $"await context.EnqueueCascadingAsync(({GetFriendlyTypeName(_handlerReturnType)}){_result.Usage}.Error).ConfigureAwait(false);"
                             : $"await context.EnqueueCascadingAsync({_result.Usage}).ConfigureAwait(false);");
                 writer.Write("return;");
                 writer.FinishBlock();
