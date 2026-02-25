@@ -94,4 +94,75 @@ public class ResultTests
         Assert.False(result.IsSuccess);
         Assert.Equal(error, result.Error);
     }
+
+    [Fact]
+    public void TryGetValue_OnSuccessResult_ReturnsTrueAndValue()
+    {
+        var result = Result.Success(42);
+
+        var success = result.TryGetValue(out var value);
+
+        Assert.True(success);
+        Assert.Equal(42, value);
+    }
+
+    [Fact]
+    public void TryGetValue_OnFailureResult_ReturnsFalseAndDefault()
+    {
+        var result = Result.NotFound<int>("not found");
+
+        var success = result.TryGetValue(out var value);
+
+        Assert.False(success);
+        Assert.Equal(default, value);
+    }
+
+    [Fact]
+    public void TryGetValue_OnSuccessWithString_ReturnsTrueAndValue()
+    {
+        var result = Result.Success("hello");
+
+        var success = result.TryGetValue(out var value);
+
+        Assert.True(success);
+        Assert.Equal("hello", value);
+    }
+
+    [Fact]
+    public void TryGetValue_OnFailureWithString_ReturnsFalseAndNull()
+    {
+        var result = Result.Validation<string>("validation error");
+
+        var success = result.TryGetValue(out var value);
+
+        Assert.False(success);
+        Assert.Null(value);
+    }
+
+    [Fact]
+    public void TryGetValue_OnSuccessWithReferenceType_ReturnsTrueAndValue()
+    {
+        var user = new { Id = 1, Name = "John" };
+        var result = Result.Success(user);
+
+        var success = result.TryGetValue(out var value);
+
+        Assert.True(success);
+        Assert.Equal(user, value);
+    }
+
+    [Fact]
+    public void TryGetValue_CanBeUsedInIfStatement()
+    {
+        var result = Result.Success(100);
+
+        if (result.TryGetValue(out var value))
+        {
+            Assert.Equal(100, value);
+        }
+        else
+        {
+            Assert.Fail("Should not reach this branch");
+        }
+    }
 }

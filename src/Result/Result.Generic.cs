@@ -32,6 +32,24 @@ public sealed partial class Result<T> : Result
             return _value!;
         }
     }
+
+    /// <summary>
+    /// Attempts to get the value from the result.
+    /// Returns true if the result is successful and sets the value parameter, otherwise returns false.
+    /// </summary>
+    /// <param name="value">When this method returns, contains the value if the result is successful, or the default value of <typeparamref name="T"/> if the result is a failure.</param>
+    /// <returns>True if the result is successful; otherwise, false.</returns>
+    public bool TryGetValue(out T? value)
+    {
+        if (IsSuccess)
+        {
+            value = _value;
+            return true;
+        }
+
+        value = default;
+        return false;
+    }
 }
 
 partial class Result<T>
