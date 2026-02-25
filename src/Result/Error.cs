@@ -62,6 +62,12 @@ public readonly record struct Error
     public static Error Validation(string description) => new(ErrorType.Validation, ErrorCodes.Validation, description);
 
     /// <summary>
+    /// Creates an Unexpected error with the default error code.
+    /// </summary>
+    /// <param name="description">Human-readable error description.</param>
+    public static Error Unexpected(string description) => new(ErrorType.Unexpected, ErrorCodes.Unexpected, description);
+
+    /// <summary>
     /// Creates a Not Found error with a custom error code.
     /// </summary>
     /// <param name="code">Custom error code.</param>
@@ -95,4 +101,11 @@ public readonly record struct Error
     /// <param name="code">Custom error code.</param>
     /// <param name="description">Human-readable error description.</param>
     public static Error Validation(string code, string description) => new(ErrorType.Validation, code, description);
+
+    /// <summary>
+    /// Creates an Unexpected error with a custom error code.
+    /// </summary>
+    /// <param name="code">Custom error code.</param>
+    /// <param name="description">Human-readable error description.</param>
+    public static Error Unexpected(string code, string description) => new(ErrorType.Unexpected, code, description);
 }

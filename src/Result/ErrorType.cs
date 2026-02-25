@@ -34,5 +34,10 @@ namespace Kubis1982.Result
         /// Indicates validation of input data has failed.
         /// </summary>
         Validation = 5,
+
+        /// <summary>
+        /// Indicates an unexpected error has occurred.
+        /// </summary>
+        Unexpected = 6,
     }
 }

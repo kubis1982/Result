@@ -72,7 +72,8 @@ public class ResultExtensionsTests
             { Error.Conflict("Conflict"), StatusCodes.Status409Conflict, "Conflict" },
             { Error.Forbidden("Forbidden"), StatusCodes.Status403Forbidden, "Forbidden" },
             { Error.Unauthorized("Unauthorized"), StatusCodes.Status401Unauthorized, "Unauthorized" },
-            { Error.Validation("Validation Error"), StatusCodes.Status422UnprocessableEntity, "Validation Error" }
+            { Error.Validation("Validation Error"), StatusCodes.Status422UnprocessableEntity, "Validation Error" },
+            { Error.Unexpected("Unexpected Error"), StatusCodes.Status500InternalServerError, "Internal Server Error" }
         };
     }
 

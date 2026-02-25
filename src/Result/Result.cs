@@ -246,6 +246,38 @@ partial class Result
 
     #endregion
 
+    #region Unexpected
+
+    /// <summary>
+    /// Creates an Unexpected failure result with the default error code.
+    /// </summary>
+    /// <param name="description">Human-readable error description.</param>
+    public static Result Unexpected(string description) => Error.Unexpected(description);
+
+    /// <summary>
+    /// Creates a generic Unexpected failure result with the default error code.
+    /// </summary>
+    /// <typeparam name="T">The type of the value that would be returned on success.</typeparam>
+    /// <param name="description">Human-readable error description.</param>
+    public static Result<T> Unexpected<T>(string description) => Error.Unexpected(description);
+
+    /// <summary>
+    /// Creates an Unexpected failure result with a custom error code.
+    /// </summary>
+    /// <param name="code">Custom error code.</param>
+    /// <param name="description">Human-readable error description.</param>
+    public static Result Unexpected(string code, string description) => Error.Unexpected(code, description);
+
+    /// <summary>
+    /// Creates a generic Unexpected failure result with a custom error code.
+    /// </summary>
+    /// <typeparam name="T">The type of the value that would be returned on success.</typeparam>
+    /// <param name="code">Custom error code.</param>
+    /// <param name="description">Human-readable error description.</param>
+    public static Result<T> Unexpected<T>(string code, string description) => Error.Unexpected(code, description);
+
+    #endregion
+
     #region Combine
 
     /// <summary>

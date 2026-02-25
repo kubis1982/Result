@@ -19,4 +19,7 @@ public static class ErrorCodes
 
     /// <summary>Validation error code.</summary>
     public const string Validation = "GENERAL.VALIDATION";
+
+    /// <summary>Unexpected error code.</summary>
+    public const string Unexpected = "GENERAL.UNEXPECTED";
 }

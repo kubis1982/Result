@@ -72,6 +72,7 @@ public static class ResultExtensions
         ErrorType.Forbidden => StatusCodes.Status403Forbidden,       // 403
         ErrorType.Unauthorized => StatusCodes.Status401Unauthorized, // 401
         ErrorType.Validation => StatusCodes.Status422UnprocessableEntity, // 422
+        ErrorType.Unexpected => StatusCodes.Status500InternalServerError, // 500
         _ => StatusCodes.Status400BadRequest                                 // 400 (default)
     };
 
@@ -88,6 +89,7 @@ public static class ResultExtensions
         ErrorType.Forbidden => "Forbidden",
         ErrorType.Unauthorized => "Unauthorized",
         ErrorType.Validation => "Validation Error",
+        ErrorType.Unexpected => "Internal Server Error",
         _ => "Bad Request"
     };
 }
