@@ -12,6 +12,11 @@ public partial class Result
     public bool IsSuccess => Error.ErrorType == ErrorType.None;
 
     /// <summary>
+    /// Indicates whether the result is a failure.
+    /// </summary>
+    public bool IsFailure => !IsSuccess;
+
+    /// <summary>
     /// Contains the <see cref="Kubis1982.Result.Error"/> describing the failure when <see cref="IsSuccess"/> is false; otherwise contains an error with <see cref="ErrorType.None"/>.
     /// </summary>
     public Error Error { get; }

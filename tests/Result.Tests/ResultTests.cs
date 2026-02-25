@@ -29,6 +29,7 @@ public class ResultTests
         Result result = error;
 
         Assert.False(result.IsSuccess);
+        Assert.True(result.IsFailure);
         Assert.Equal(error, result.Error);
     }
 
@@ -38,6 +39,7 @@ public class ResultTests
         var result = Result.Success(42);
 
         Assert.True(result.IsSuccess);
+        Assert.False(result.IsFailure);
         Assert.Equal(42, result.Value);
     }
 
@@ -58,6 +60,7 @@ public class ResultTests
         var result = Result.Failure<int>(error);
 
         Assert.False(result.IsSuccess);
+        Assert.True(result.IsFailure);
         Assert.Equal(error, result.Error);
     }
 
