@@ -49,13 +49,13 @@ public static partial class ResultExtensions
     }
 
     /// <summary>
-    /// Combines multiple <see cref="Result{T}"/> instances into a single <see cref="Result{IEnumerable{T}}"/>.
+    /// Combines multiple <see cref="Result{T}"/> instances into a single result containing a collection of all values.
     /// Returns the first failure encountered (fail-fast), or a collection of all values if all results are successful.
     /// </summary>
     /// <typeparam name="T">The type of the value contained in the results.</typeparam>
     /// <param name="results">The results to combine.</param>
     /// <returns>
-    /// A successful <see cref="Result{IEnumerable{T}}"/> containing all values if all results are successful;
+    /// A successful result containing an <see cref="IEnumerable{T}"/> with all values if all results are successful;
     /// otherwise the first failed result encountered.
     /// </returns>
     public static Result<IEnumerable<T>> Combine<T>(params Result<T>[] results)
@@ -76,13 +76,13 @@ public static partial class ResultExtensions
     }
 
     /// <summary>
-    /// Combines multiple <see cref="Result{T}"/> instances from an enumerable into a single <see cref="Result{IEnumerable{T}}"/>.
+    /// Combines multiple <see cref="Result{T}"/> instances from an enumerable into a single result containing a collection of all values.
     /// Returns the first failure encountered (fail-fast), or a collection of all values if all results are successful.
     /// </summary>
     /// <typeparam name="T">The type of the value contained in the results.</typeparam>
     /// <param name="results">The enumerable of results to combine.</param>
     /// <returns>
-    /// A successful <see cref="Result{IEnumerable{T}}"/> containing all values if all results are successful,
+    /// A successful result containing an <see cref="IEnumerable{T}"/> with all values if all results are successful;
     /// otherwise the first failed result encountered.
     /// </returns>
     public static Result<IEnumerable<T>> Combine<T>(IEnumerable<Result<T>> results)
