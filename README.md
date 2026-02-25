@@ -54,6 +54,7 @@ dotnet add package Kubis1982.Result.WolverineFx
 - **Tuple deconstruction**: Use pattern matching with `Deconstruct` method
 - **TryGetValue pattern**: Safe value extraction without exceptions
 - **Combine operations**: Compose multiple results with fail-fast behavior
+- **Async support**: Full `MapAsync`/`BindAsync` support for asynchronous operations
 
 ---
 

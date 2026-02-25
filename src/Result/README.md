@@ -299,6 +299,64 @@ var numbersResult = Result.Combine(
 
 **Important:** `Combine` implements fail-fast behavior - it stops at the first failure and returns immediately without evaluating remaining results.
 
+### Async Operations (MapAsync / BindAsync)
+
+Handle asynchronous operations in Result pipelines:
+
+```csharp
+// MapAsync - transform value asynchronously
+var result = Result.Success(42);
+var mapped = await result.MapAsync(async x =>
+{
+    await Task.Delay(100);
+    return x.ToString();
+});
+
+// BindAsync - chain async operations
+var userResult = await GetUserIdAsync()
+    .BindAsync(async id => await LoadUserAsync(id))
+    .MapAsync(async user => await user.ToDisplayNameAsync());
+
+// Working with Task<Result<T>>
+Task<Result<User>> userTask = GetUserAsync(userId);
+
+var emailResult = await userTask
+    .MapAsync(user => user.Email)           // Sync transformation
+    .BindAsync(async email => await ValidateEmailAsync(email)); // Async validation
+
+// Real-world async pipeline
+public async Task<Result<string>> ProcessUserRegistrationAsync(RegisterRequest request)
+{
+    return await ValidateRequestAsync(request)
+        .BindAsync(async req => await CheckEmailAvailabilityAsync(req.Email))
+        .BindAsync(async req => await CreateUserAsync(req))
+        .MapAsync(async user => await SendWelcomeEmailAsync(user))
+        .MapAsync(async success => "User registered successfully");
+}
+
+// Error handling in async operations
+var result = await GetDataAsync()
+    .MapAsync(async data =>
+    {
+        try
+        {
+            return await ProcessDataAsync(data);
+        }
+        catch (Exception ex)
+        {
+            return Result.Unexpected("PROCESSING_ERROR", ex.Message);
+        }
+    });
+```
+
+**Async Method Types:**
+- `MapAsync<T, TOut>(Result<T>, Func<T, Task<TOut>>)` - Transform value asynchronously
+- `MapAsync<T, TOut>(Task<Result<T>>, Func<T, TOut>)` - Transform from async result
+- `BindAsync<T, TOut>(Result<T>, Func<T, Task<Result<TOut>>>)` - Chain async operations
+- `BindAsync<T, TOut>(Task<Result<T>>, Func<T, Result<TOut>>)` - Chain from async result
+
+All async methods use `ConfigureAwait(false)` for optimal performance in ASP.NET scenarios.
+
 ## Common Patterns
 
 ### Early Return Pattern
