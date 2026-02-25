@@ -1,0 +1,8 @@
+{
+  "git.commitMessageProvider": "copilot",
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "## Commit Message Format: <type>(<scope>): <subject>\n\n### Types:\n- feat: new feature\n- fix: bug fix\n- docs: documentation changes\n- test: test changes\n- refactor: code refactoring\n- perf: performance improvements\n- build: build system or dependencies\n- ci: CI/CD changes\n- chore: maintenance tasks\n\n### Scopes by file path:\n- src/Result/ → result\n- src/Result.AspNet/ → aspnet\n- src/Result.WolverineFx/ → wolverine\n- tests/ → tests\n- *.csproj, Directory.Build.props, *.sln* → deps\n- .github/workflows/ → ci\n- *.md → docs\n\n### Rules:\n- Use imperative mood: 'add' not 'added'\n- Lowercase after colon\n- No period at end\n- Max 72 characters\n- Be specific: name the method/class affected\n- NEVER use: WIP, update, changes, fix bug\n\n### Breaking Changes:\nAdd ! after scope: feat(result)!: change Match method signature\n\n### Examples:\n- feat(result): add TryMap method for exception-safe mapping\n- fix(aspnet): prevent null reference in error middleware\n- docs(readme): add WolverineFx integration guide\n- test(result): add comprehensive Match method tests\n- refactor(wolverine): extract handler factory class\n- perf(result): reduce allocations in Map method\n- build(deps): upgrade WolverineFx to 2.1.0\n- ci(release): automate changelog generation\n- chore(release): bump version to 1.2.3"
+    }
+  ]
+}
