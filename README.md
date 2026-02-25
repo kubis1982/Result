@@ -102,7 +102,6 @@ dotnet test tests/Result.WolverineFx.Tests/Kubis1982.Result.WolverineFx.Tests.cs
 
 This repository uses automated CI/CD for publishing releases:
 
-- **Continuous Integration**: All commits to `main` are automatically tested
 - **Automated Releases**: Creating a version tag (e.g., `v1.2.0`) triggers the full release pipeline
 - **NuGet Publishing**: Packages are automatically published to NuGet.org
 
