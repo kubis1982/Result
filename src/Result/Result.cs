@@ -292,13 +292,13 @@ partial class Result
     public static Result Combine(params Result[] results) => ResultExtensions.Combine(results);
 
     /// <summary>
-    /// Combines multiple <see cref="Result{T}"/> instances into a single <see cref="Result{IEnumerable{T}}"/>.
+    /// Combines multiple <see cref="Result{T}"/> instances into a single result containing a collection of all values.
     /// Returns the first failure encountered (fail-fast), or a collection of all values if all results are successful.
     /// </summary>
     /// <typeparam name="T">The type of the value contained in the results.</typeparam>
     /// <param name="results">The results to combine.</param>
     /// <returns>
-    /// A successful <see cref="Result{IEnumerable{T}}"/> containing all values if all results are successful,
+    /// A successful result containing all values if all results are successful,
     /// otherwise the first failed result encountered.
     /// </returns>
     public static Result<IEnumerable<T>> Combine<T>(params Result<T>[] results) => ResultExtensions.Combine(results);
