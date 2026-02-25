@@ -23,25 +23,24 @@ public partial class ResultExtensionsTests
         [Fact]
         public void Bind_WithBinder_WhenResultIsFailure_PropagatesFailure()
         {
-            var error = Error.NotFound("not found");
-            var result = Result.Failure<int>(error);
+            var result = Result.NotFound<int>("not found");
 
             var bound = result.Bind(x => Result.Success(x.ToString()));
 
-            Assert.False(bound.IsSuccess);
-            Assert.Equal(error, bound.Error);
+            Assert.True(bound.IsFailure);
+            Assert.Equal(result.Error, bound.Error);
         }
 
         [Fact]
         public void Bind_WithBinder_CanReturnFailureFromBinder()
         {
-            var result = Result<int>.Success(42);
-            var binderError = Error.Validation("validation failed");
+            var result = Result.Success(42);
+            var resultError = Result.Validation("validation failed");
 
-            var bound = result.Bind(x => Result<string>.Failure(binderError));
+            var bound = result.Bind(x => resultError);
 
-            Assert.False(bound.IsSuccess);
-            Assert.Equal(binderError, bound.Error);
+            Assert.True(bound.IsFailure);
+            Assert.Equal(resultError.Error, bound.Error);  
         }
 
         [Fact]
@@ -54,17 +53,17 @@ public partial class ResultExtensionsTests
             var bound = result.Bind(x =>
             {
                 binderCalled = true;
-                return Result<string>.Success(x.ToString());
+                return Result.Success(x.ToString());
             });
 
             Assert.False(binderCalled);
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
         }
 
         [Fact]
         public void Bind_WithBinder_CanChainOperations()
         {
-            var result = Result<int>.Success(10);
+            var result = Result.Success(10);
 
             var bound = result
                 .Bind(x => Result.Success(x * 2))
@@ -86,7 +85,7 @@ public partial class ResultExtensionsTests
                 .Bind(x => Result.Failure<int>(error))
                 .Bind(x => Result.Success<string>("should not execute"));
 
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
             Assert.Equal(error, bound.Error);
         }
 
@@ -112,7 +111,7 @@ public partial class ResultExtensionsTests
 
             var bound = result.Bind(x => Result.Success());
 
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
             Assert.Equal(error, bound.Error);
         }
 
@@ -124,7 +123,7 @@ public partial class ResultExtensionsTests
 
             var bound = result.Bind(x => Result.Failure(binderError));
 
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
             Assert.Equal(binderError, bound.Error);
         }
 
@@ -142,7 +141,7 @@ public partial class ResultExtensionsTests
             });
 
             Assert.False(binderCalled);
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
         }
 
         #endregion
@@ -168,7 +167,7 @@ public partial class ResultExtensionsTests
 
             var bound = result.Bind(() => Result.Success("hello"));
 
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
             Assert.Equal(error, bound.Error);
         }
 
@@ -180,7 +179,7 @@ public partial class ResultExtensionsTests
 
             var bound = result.Bind(() => Result.Failure(binderError));
 
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
             Assert.Equal(binderError, bound.Error);
         }
 
@@ -198,7 +197,7 @@ public partial class ResultExtensionsTests
             });
 
             Assert.False(binderCalled);
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
         }
 
         #endregion
@@ -218,13 +217,12 @@ public partial class ResultExtensionsTests
         [Fact]
         public void Bind_NonGenericToNonGeneric_WhenResultIsFailure_PropagatesFailure()
         {
-            var error = Error.Validation("SERVER.ERROR", "server error");
-            var result = Result.Failure(error);
+            var result = Result.Validation("SERVER.ERROR", "server error");
 
             var bound = result.Bind(() => Result.Success());
 
-            Assert.False(bound.IsSuccess);
-            Assert.Equal(error, bound.Error);
+            Assert.True(bound.IsFailure);
+            Assert.Equal(result.Error, bound.Error);
         }
 
         [Fact]
@@ -235,7 +233,7 @@ public partial class ResultExtensionsTests
 
             var bound = result.Bind(() => Result.Failure(binderError));
 
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
             Assert.Equal(binderError, bound.Error);
         }
 
@@ -253,7 +251,7 @@ public partial class ResultExtensionsTests
             });
 
             Assert.False(binderCalled);
-            Assert.False(bound.IsSuccess);
+            Assert.True(bound.IsFailure);
         }
 
         [Fact]
@@ -296,10 +294,10 @@ public partial class ResultExtensionsTests
             var final = result
                 .Bind(x => int.TryParse(x, out var num)
                     ? Result.Success(num)
-                    : Result.Failure<int>(Error.Validation("not a number")))
+                    : Result.Validation<int>("not a number"))
                 .Bind(x => x > 0
                     ? Result.Success(x * 2)
-                    : Result.Failure<int>(Error.Validation("not positive")))
+                    : Result.Validation<int>("not positive"))
                 .Map(x => $"Value: {x}");
 
             Assert.True(final.IsSuccess);
@@ -318,7 +316,7 @@ public partial class ResultExtensionsTests
                 .Bind(x => Result.Success(x * 2))
                 .Map(x => $"Value: {x}");
 
-            Assert.False(final.IsSuccess);
+            Assert.True(final.IsFailure);
             Assert.Equal(ErrorCodes.Validation, final.Error.Code);
         }
 

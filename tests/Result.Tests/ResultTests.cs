@@ -18,7 +18,7 @@ public class ResultTests
         var error = Error.Validation("E001", "failure");
         var result = Result.Failure(error);
 
-        Assert.False(result.IsSuccess);
+        Assert.True(result.IsFailure);
         Assert.Equal(error, result.Error);
     }
 
@@ -28,8 +28,8 @@ public class ResultTests
         var error = Error.Validation("bad");
         Result result = error;
 
-        Assert.False(result.IsSuccess);
         Assert.True(result.IsFailure);
+        Assert.False(result.IsSuccess);
         Assert.Equal(error, result.Error);
     }
 
@@ -59,8 +59,8 @@ public class ResultTests
         var error = Error.NotFound("not found");
         var result = Result.Failure<int>(error);
 
-        Assert.False(result.IsSuccess);
         Assert.True(result.IsFailure);
+        Assert.False(result.IsSuccess);
         Assert.Equal(error, result.Error);
     }
 
@@ -91,7 +91,7 @@ public class ResultTests
 
         Result<int> result = error;
 
-        Assert.False(result.IsSuccess);
+        Assert.True(result.IsFailure);
         Assert.Equal(error, result.Error);
     }
 

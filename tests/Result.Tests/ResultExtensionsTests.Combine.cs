@@ -30,7 +30,7 @@ public partial class ResultExtensionsTests
 
             var combined = ResultExtensions.Combine(result1, result2, result3);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(error, combined.Error);
         }
 
@@ -45,7 +45,7 @@ public partial class ResultExtensionsTests
 
             var combined = ResultExtensions.Combine(result1, result2, result3);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(error1, combined.Error);
         }
 
@@ -85,7 +85,7 @@ public partial class ResultExtensionsTests
 
             var combined = ResultExtensions.Combine(results);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(error, combined.Error);
         }
 
@@ -112,7 +112,7 @@ public partial class ResultExtensionsTests
 
             var combined = ResultExtensions.Combine(result1, result2, result3);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(error, combined.Error);
         }
 
@@ -127,7 +127,7 @@ public partial class ResultExtensionsTests
 
             var combined = ResultExtensions.Combine(result1, result2, result3);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(error1, combined.Error);
         }
 
@@ -169,7 +169,7 @@ public partial class ResultExtensionsTests
 
             var combined = ResultExtensions.Combine(results);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(error, combined.Error);
         }
 
@@ -199,7 +199,7 @@ public partial class ResultExtensionsTests
             var results = new List<Result<int>> { result1, result2, result3 };
             var combined = ResultExtensions.Combine(results);
 
-            Assert.False(combined.IsSuccess);
+            Assert.True(combined.IsFailure);
             Assert.Equal(result2.Error, combined.Error);
             Assert.Equal(1, evaluationCounter);
         }
@@ -248,7 +248,7 @@ public partial class ResultExtensionsTests
 
             var validationResult = ResultExtensions.Combine(nameValidation, emailValidation, ageValidation);
 
-            Assert.False(validationResult.IsSuccess);
+            Assert.True(validationResult.IsFailure);
             Assert.Equal("Name is required", validationResult.Error.Description);
 
             static Result ValidateName(string name) =>

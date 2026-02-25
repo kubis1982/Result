@@ -28,7 +28,7 @@ public partial class ResultExtensionsTests
 
             var mapped = result.Map(x => x.ToString());
 
-            Assert.False(mapped.IsSuccess);
+            Assert.True(mapped.IsFailure);
             Assert.Equal(error, mapped.Error);
         }
 
@@ -46,7 +46,7 @@ public partial class ResultExtensionsTests
             });
 
             Assert.False(mapperCalled);
-            Assert.False(mapped.IsSuccess);
+            Assert.True(mapped.IsFailure);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ public partial class ResultExtensionsTests
 
             var mapped = result.Map();
 
-            Assert.False(mapped.IsSuccess);
+            Assert.True(mapped.IsFailure);
             Assert.Equal(error, mapped.Error);
         }
 
@@ -111,7 +111,7 @@ public partial class ResultExtensionsTests
 
             var mapped = result.Map<string>();
 
-            Assert.False(mapped.IsSuccess);
+            Assert.True(mapped.IsFailure);
             Assert.Equal(error, mapped.Error);
         }
 
@@ -144,7 +144,7 @@ public partial class ResultExtensionsTests
                 .Map(x => x + 5)
                 .Map(x => x.ToString());
 
-            Assert.False(mapped.IsSuccess);
+            Assert.True(mapped.IsFailure);
             Assert.Equal(error, mapped.Error);
         }
 
