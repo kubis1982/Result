@@ -1,5 +1,6 @@
 namespace Kubis1982.Result
 {
+    using JasperFx.CodeGeneration;
     using Kubis1982.Result.Handlers;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -16,6 +17,7 @@ namespace Kubis1982.Result
                 .UseWolverine(opts =>
                 {
                     opts.CodeGeneration.AddContinuationStrategy<ResultContinuationStrategy>();
+                    opts.CodeGeneration.TypeLoadMode = TypeLoadMode.Auto;
                     opts.Discovery.IncludeAssembly(typeof(TupleResultHandler).Assembly);
                 })
                 .StartAsync();
