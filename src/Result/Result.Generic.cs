@@ -50,6 +50,19 @@ public sealed partial class Result<T> : Result
         value = default;
         return false;
     }
+
+    /// <summary>
+    /// Deconstructs the result into its success state, value, and error.
+    /// </summary>
+    /// <param name="isSuccess">True if the result is successful; otherwise, false.</param>
+    /// <param name="value">The value if the result is successful; otherwise, the default value of <typeparamref name="T"/>.</param>
+    /// <param name="error">The error if the result is a failure; otherwise, an error with <see cref="ErrorType.None"/>.</param>
+    public void Deconstruct(out bool isSuccess, out T? value, out Error error)
+    {
+        isSuccess = IsSuccess;
+        value = IsSuccess ? _value : default;
+        error = Error;
+    }
 }
 
 partial class Result<T>

@@ -165,4 +165,158 @@ public class ResultTests
             Assert.Fail("Should not reach this branch");
         }
     }
+
+    [Fact]
+    public void Deconstruct_OnSuccessResult_ReturnsSuccessState()
+    {
+        var result = Result.Success();
+
+        var (isSuccess, error) = result;
+
+        Assert.True(isSuccess);
+        Assert.Equal(ErrorType.None, error.ErrorType);
+    }
+
+    [Fact]
+    public void Deconstruct_OnFailureResult_ReturnsFailureStateAndError()
+    {
+        var expectedError = Error.NotFound("not found");
+        var result = Result.Failure(expectedError);
+
+        var (isSuccess, error) = result;
+
+        Assert.False(isSuccess);
+        Assert.Equal(expectedError, error);
+    }
+
+    [Fact]
+    public void Deconstruct_Generic_OnSuccessResult_ReturnsSuccessStateAndValue()
+    {
+        var result = Result.Success(42);
+
+        var (isSuccess, value, error) = result;
+
+        Assert.True(isSuccess);
+        Assert.Equal(42, value);
+        Assert.Equal(ErrorType.None, error.ErrorType);
+    }
+
+    [Fact]
+    public void Deconstruct_Generic_OnFailureResult_ReturnsFailureStateAndError()
+    {
+        var expectedError = Error.Validation("validation error");
+        var result = Result.Failure<int>(expectedError);
+
+        var (isSuccess, value, error) = result;
+
+        Assert.False(isSuccess);
+        Assert.Equal(default, value);
+        Assert.Equal(expectedError, error);
+    }
+
+    [Fact]
+    public void Deconstruct_Generic_WithString_OnSuccess_ReturnsValue()
+    {
+        var result = Result.Success("hello");
+
+        var (isSuccess, value, error) = result;
+
+        Assert.True(isSuccess);
+        Assert.Equal("hello", value);
+        Assert.Equal(ErrorType.None, error.ErrorType);
+    }
+
+    [Fact]
+    public void Deconstruct_Generic_WithString_OnFailure_ReturnsNull()
+    {
+        var expectedError = Error.Forbidden("forbidden");
+        var result = Result.Failure<string>(expectedError);
+
+        var (isSuccess, value, error) = result;
+
+        Assert.False(isSuccess);
+        Assert.Null(value);
+        Assert.Equal(expectedError, error);
+    }
+
+    [Fact]
+    public void Deconstruct_CanBeUsedInSwitch()
+    {
+        var result = Result.Success(100);
+
+        var output = result switch
+        {
+            (true, var val, _) => $"Success: {val}",
+            (false, _, var err) => $"Error: {err.Description}",
+        };
+
+        Assert.Equal("Success: 100", output);
+    }
+
+    [Fact]
+    public void Deconstruct_FailureCase_CanBeUsedInSwitch()
+    {
+        var result = Result.Failure<int>(Error.NotFound("Item not found"));
+
+        var output = result switch
+        {
+            (true, var val, _) => $"Success: {val}",
+            (false, _, var err) => $"Error: {err.Description}",
+        };
+
+        Assert.Equal("Error: Item not found", output);
+    }
+
+    [Fact]
+    public void Combine_StaticMethod_WithAllSuccessfulResults_ReturnsSuccess()
+    {
+        var result1 = Result.Success();
+        var result2 = Result.Success();
+        var result3 = Result.Success();
+
+        var combined = Result.Combine(result1, result2, result3);
+
+        Assert.True(combined.IsSuccess);
+    }
+
+    [Fact]
+    public void Combine_StaticMethod_WithFailure_ReturnsFirstFailure()
+    {
+        var result1 = Result.Success();
+        var error = Error.NotFound("not found");
+        var result2 = Result.Failure(error);
+        var result3 = Result.Success();
+
+        var combined = Result.Combine(result1, result2, result3);
+
+        Assert.True(combined.IsFailure);
+        Assert.Equal(error, combined.Error);
+    }
+
+    [Fact]
+    public void Combine_StaticMethod_Generic_WithAllSuccessfulResults_ReturnsSuccessWithValues()
+    {
+        var result1 = Result.Success(10);
+        var result2 = Result.Success(20);
+        var result3 = Result.Success(30);
+
+        var combined = Result.Combine(result1, result2, result3);
+
+        Assert.True(combined.IsSuccess);
+        Assert.Equal([10, 20, 30], combined.Value);
+    }
+
+    [Fact]
+    public void Combine_StaticMethod_Generic_WithFailure_ReturnsFirstFailure()
+    {
+        var result1 = Result.Success(10);
+        var error = Error.Validation("validation error");
+        var result2 = Result.Failure<int>(error);
+        var result3 = Result.Success(30);
+
+        var combined = Result.Combine(result1, result2, result3);
+
+        Assert.True(combined.IsFailure);
+        Assert.Equal(error, combined.Error);
+    }
 }

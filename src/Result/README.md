@@ -110,6 +110,56 @@ var failedResult = Result.NotFound<int>("Not found");
 failedResult.TryGetValue(out var val); // Returns false, val is default(int)
 ```
 
+### Deconstruct
+
+Use tuple deconstruction to extract result components:
+
+```csharp
+// Non-generic Result
+var result = ValidateInput(data);
+var (isSuccess, error) = result;
+
+if (isSuccess)
+{
+    Console.WriteLine("Validation passed");
+}
+else
+{
+    Console.WriteLine($"Validation failed: {error.Description}");
+}
+
+// Generic Result<T>
+var userResult = GetUser(userId);
+var (success, user, error) = userResult;
+
+if (success)
+{
+    Console.WriteLine($"User: {user.Name}");
+}
+else
+{
+    Console.WriteLine($"Error: {error.Description}");
+}
+
+// Pattern matching with switch expressions
+var message = userResult switch
+{
+    (true, var user, _) => $"Welcome, {user.Name}!",
+    (false, _, var err) => $"Failed to load user: {err.Description}"
+};
+
+// Destructuring in method parameters
+public void ProcessResult(Result<int> result)
+{
+    var (isSuccess, value, error) = result;
+
+    if (isSuccess)
+        Console.WriteLine($"Processing value: {value}");
+    else
+        Console.WriteLine($"Error: {error.Code}");
+}
+```
+
 ## Extension Methods
 
 ### Mapping
@@ -201,7 +251,12 @@ var result1 = GetValue1();  // Result<int>
 var result2 = GetValue2();  // Result<int>
 var result3 = GetValue3();  // Result<int>
 
+// Using extension method
 var combined = ResultExtensions.Combine(result1, result2, result3);
+
+// Or using static method (shorter)
+var combined = Result.Combine(result1, result2, result3);
+
 // Returns Result<IEnumerable<int>> with all values if successful
 // Returns first failure if any result failed
 
@@ -210,6 +265,30 @@ if (combined.IsSuccess)
     var sum = combined.Value.Sum();
     Console.WriteLine($"Total: {sum}");
 }
+
+// Static method examples
+// Non-generic
+var validationResult = Result.Combine(
+    ValidateName(name),
+    ValidateEmail(email),
+    ValidateAge(age)
+);
+
+// Generic
+var userDataResult = Result.Combine(
+    GetUserName(userId),      // Result<string>
+    GetUserEmail(userId),     // Result<string>
+    GetUserAge(userId)        // Result<int>
+);
+// This won't work as T must be the same type
+// Use separate Combine calls or different approach
+
+// Better: Combine same types
+var numbersResult = Result.Combine(
+    ParseNumber("10"),        // Result<int>
+    ParseNumber("20"),        // Result<int>
+    ParseNumber("30")         // Result<int>
+);
 ```
 
 **Use Cases for Combine:**

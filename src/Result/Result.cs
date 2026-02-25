@@ -36,6 +36,17 @@ public partial class Result
     {
         Error = error;
     }
+
+    /// <summary>
+    /// Deconstructs the result into its success state and error.
+    /// </summary>
+    /// <param name="isSuccess">True if the result is successful; otherwise, false.</param>
+    /// <param name="error">The error if the result is a failure; otherwise, an error with <see cref="ErrorType.None"/>.</param>
+    public void Deconstruct(out bool isSuccess, out Error error)
+    {
+        isSuccess = IsSuccess;
+        error = Error;
+    }
 }
 
 partial class Result
@@ -232,6 +243,33 @@ partial class Result
     /// <param name="code">Custom error code.</param>
     /// <param name="description">Human-readable error description.</param>
     public static Result<T> Validation<T>(string code, string description) => Error.Validation(code, description);
+
+    #endregion
+
+    #region Combine
+
+    /// <summary>
+    /// Combines multiple <see cref="Result"/> instances into a single <see cref="Result"/>.
+    /// Returns the first failure encountered (fail-fast), or success if all results are successful.
+    /// </summary>
+    /// <param name="results">The results to combine.</param>
+    /// <returns>
+    /// A successful <see cref="Result"/> if all results are successful,
+    /// otherwise the first failed <see cref="Result"/> encountered.
+    /// </returns>
+    public static Result Combine(params Result[] results) => ResultExtensions.Combine(results);
+
+    /// <summary>
+    /// Combines multiple <see cref="Result{T}"/> instances into a single <see cref="Result{IEnumerable{T}}"/>.
+    /// Returns the first failure encountered (fail-fast), or a collection of all values if all results are successful.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the results.</typeparam>
+    /// <param name="results">The results to combine.</param>
+    /// <returns>
+    /// A successful <see cref="Result{IEnumerable{T}}"/> containing all values if all results are successful,
+    /// otherwise the first failed result encountered.
+    /// </returns>
+    public static Result<IEnumerable<T>> Combine<T>(params Result<T>[] results) => ResultExtensions.Combine(results);
 
     #endregion
 
