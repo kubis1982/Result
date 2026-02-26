@@ -4,6 +4,16 @@ namespace Kubis1982.Result.Handlers
 
     public static class ResultTHandler
     {
+        public static Task<Result> ValidateAsync(ResultTCommand command)
+        {
+            return Task.FromResult(Result.Success());
+        }
+
+        public static Task<Result> BeforeAsync(ResultTCommand command)
+        {
+            return Task.FromResult(Result.Success());
+        }
+
         public static Task<Result<Contractor>> LoadAsync(ResultTCommand command)
         {
             var contractor = Repository.Contractors.FirstOrDefault(u => u.Id == command.ContractorId);
