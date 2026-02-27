@@ -23,7 +23,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task Result_Success_ShouldExecuteHandle()
+        public async Task Should_ExecuteHandle_When_ResultIsSuccess()
         {
             // Arrange
             using var host = await CreateHost();
@@ -40,7 +40,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task Result_NotFound_ShouldReturnNotFoundError()
+        public async Task Should_ReturnNotFoundError_When_ResultIsNotFound()
         {
             // Arrange
             using var host = await CreateHost();

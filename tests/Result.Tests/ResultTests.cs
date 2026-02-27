@@ -5,7 +5,7 @@ namespace Kubis1982.Result;
 public class ResultTests
 {
     [Fact]
-    public void Success_WhenCalled_ReturnsSuccessResult()
+    public void Should_ReturnSuccessResult_When_SuccessIsCalled()
     {
         var result = Result.Success();
 
@@ -13,7 +13,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Failure_WithError_ReturnsFailureWithError()
+    public void Should_ReturnFailureWithError_When_FailureIsCalledWithError()
     {
         var error = Error.Validation("E001", "failure");
         var result = Result.Failure(error);
@@ -23,7 +23,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void ImplicitOperator_FromError_ReturnsFailureResult()
+    public void Should_ReturnFailureResult_When_ImplicitOperatorIsUsedWithError()
     {
         var error = Error.Validation("bad");
         Result result = error;
@@ -34,7 +34,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Success_WithValue_ReturnsSuccessWithValue()
+    public void Should_ReturnSuccessWithValue_When_SuccessIsCalledWithValue()
     {
         var result = Result.Success(42);
 
@@ -44,7 +44,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void ExplicitOperator_OnSuccessResult_ReturnsValue()
+    public void Should_ReturnValue_When_ExplicitOperatorIsUsedOnSuccessResult()
     {
         var result = Result.Success(42);
 
@@ -54,7 +54,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Failure_WithError_ReturnsFailureResult()
+    public void Should_ReturnFailureResult_When_FailureIsCalledWithError()
     {
         var error = Error.NotFound("not found");
         var result = Result.Failure<int>(error);
@@ -65,7 +65,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Value_OnFailureResult_ThrowsResultException()
+    public void Should_ThrowResultException_When_ValueIsAccessedOnFailureResult()
     {
         var error = Error.NotFound("not found");
         var result = Result.Failure<int>(error);
@@ -76,7 +76,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void ImplicitOperator_FromValue_ReturnsSuccessResult()
+    public void Should_ReturnSuccessResult_When_ImplicitOperatorIsUsedWithValue()
     {
         Result<int> result = 7;
 
@@ -85,7 +85,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void ImplicitOperatorGeneric_FromError_ReturnsFailureResult()
+    public void Should_ReturnFailureResult_When_GenericImplicitOperatorIsUsedWithError()
     {
         var error = Error.Forbidden("no");
 
@@ -96,7 +96,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void TryGetValue_OnSuccessResult_ReturnsTrueAndValue()
+    public void Should_ReturnTrueAndValue_When_TryGetValueIsCalledOnSuccessResult()
     {
         var result = Result.Success(42);
 
@@ -107,7 +107,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void TryGetValue_OnFailureResult_ReturnsFalseAndDefault()
+    public void Should_ReturnFalseAndDefault_When_TryGetValueIsCalledOnFailureResult()
     {
         var result = Result.NotFound<int>("not found");
 
@@ -118,7 +118,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void TryGetValue_OnSuccessWithString_ReturnsTrueAndValue()
+    public void Should_ReturnTrueAndValue_When_TryGetValueIsCalledOnSuccessWithString()
     {
         var result = Result.Success("hello");
 
@@ -129,7 +129,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void TryGetValue_OnFailureWithString_ReturnsFalseAndNull()
+    public void Should_ReturnFalseAndNull_When_TryGetValueIsCalledOnFailureWithString()
     {
         var result = Result.Validation<string>("validation error");
 
@@ -140,7 +140,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void TryGetValue_OnSuccessWithReferenceType_ReturnsTrueAndValue()
+    public void Should_ReturnTrueAndValue_When_TryGetValueIsCalledOnSuccessWithReferenceType()
     {
         var user = new { Id = 1, Name = "John" };
         var result = Result.Success(user);
@@ -152,7 +152,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void TryGetValue_CanBeUsedInIfStatement()
+    public void Should_WorkInIfStatement_When_TryGetValueIsUsed()
     {
         var result = Result.Success(100);
 
@@ -167,7 +167,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_OnSuccessResult_ReturnsSuccessState()
+    public void Should_ReturnSuccessState_When_DeconstructIsCalledOnSuccessResult()
     {
         var result = Result.Success();
 
@@ -178,7 +178,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_OnFailureResult_ReturnsFailureStateAndError()
+    public void Should_ReturnFailureStateAndError_When_DeconstructIsCalledOnFailureResult()
     {
         var expectedError = Error.NotFound("not found");
         var result = Result.Failure(expectedError);
@@ -190,7 +190,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_Generic_OnSuccessResult_ReturnsSuccessStateAndValue()
+    public void Should_ReturnSuccessStateAndValue_When_GenericDeconstructIsCalledOnSuccessResult()
     {
         var result = Result.Success(42);
 
@@ -202,7 +202,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_Generic_OnFailureResult_ReturnsFailureStateAndError()
+    public void Should_ReturnFailureStateAndError_When_GenericDeconstructIsCalledOnFailureResult()
     {
         var expectedError = Error.Validation("validation error");
         var result = Result.Failure<int>(expectedError);
@@ -215,7 +215,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_Generic_WithString_OnSuccess_ReturnsValue()
+    public void Should_ReturnValue_When_GenericDeconstructIsCalledWithStringOnSuccess()
     {
         var result = Result.Success("hello");
 
@@ -227,7 +227,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_Generic_WithString_OnFailure_ReturnsNull()
+    public void Should_ReturnNull_When_GenericDeconstructIsCalledWithStringOnFailure()
     {
         var expectedError = Error.Forbidden("forbidden");
         var result = Result.Failure<string>(expectedError);
@@ -240,7 +240,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_CanBeUsedInSwitch()
+    public void Should_WorkInSwitch_When_DeconstructIsUsed()
     {
         var result = Result.Success(100);
 
@@ -254,7 +254,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Deconstruct_FailureCase_CanBeUsedInSwitch()
+    public void Should_WorkInSwitch_When_DeconstructIsUsedWithFailureCase()
     {
         var result = Result.Failure<int>(Error.NotFound("Item not found"));
 
@@ -268,7 +268,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Combine_StaticMethod_WithAllSuccessfulResults_ReturnsSuccess()
+    public void Should_ReturnSuccess_When_CombiningAllSuccessfulResults()
     {
         var result1 = Result.Success();
         var result2 = Result.Success();
@@ -280,7 +280,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Combine_StaticMethod_WithFailure_ReturnsFirstFailure()
+    public void Should_ReturnFirstFailure_When_CombiningResultsWithFailure()
     {
         var result1 = Result.Success();
         var error = Error.NotFound("not found");
@@ -294,7 +294,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Combine_StaticMethod_Generic_WithAllSuccessfulResults_ReturnsSuccessWithValues()
+    public void Should_ReturnSuccessWithValues_When_CombiningAllSuccessfulGenericResults()
     {
         var result1 = Result.Success(10);
         var result2 = Result.Success(20);
@@ -307,7 +307,7 @@ public class ResultTests
     }
 
     [Fact]
-    public void Combine_StaticMethod_Generic_WithFailure_ReturnsFirstFailure()
+    public void Should_ReturnFirstFailure_When_CombiningGenericResultsWithFailure()
     {
         var result1 = Result.Success(10);
         var error = Error.Validation("validation error");

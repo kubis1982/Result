@@ -10,7 +10,7 @@ public partial class ResultExtensionsTests
         #region Match Tests - Non-Generic Result
 
         [Fact]
-        public void Match_NonGeneric_OnSuccess_CallsOnSuccessFunction()
+        public void Should_CallOnSuccessFunction_When_MatchIsCalledOnNonGenericSuccess()
         {
             var result = Result.Success();
 
@@ -23,7 +23,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_NonGeneric_OnFailure_CallsOnFailureFunction()
+        public void Should_CallOnFailureFunction_When_MatchIsCalledOnNonGenericFailure()
         {
             var error = Error.NotFound("Resource not found");
             var result = Result.Failure(error);
@@ -37,7 +37,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_NonGeneric_OnSuccess_DoesNotCallOnFailure()
+        public void Should_NotCallOnFailure_When_NonGenericMatchOnSuccess()
         {
             var result = Result.Success();
             var onFailureCalled = false;
@@ -55,7 +55,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_NonGeneric_OnFailure_DoesNotCallOnSuccess()
+        public void Should_NotCallOnSuccess_When_NonGenericMatchOnFailure()
         {
             var result = Result.Failure(Error.Validation("Validation error"));
             var onSuccessCalled = false;
@@ -77,7 +77,7 @@ public partial class ResultExtensionsTests
         #region Match Tests - Generic Result
 
         [Fact]
-        public void Match_Generic_OnSuccess_CallsOnSuccessFunctionWithValue()
+        public void Should_CallOnSuccessFunctionWithValue_When_MatchIsCalledOnGenericSuccess()
         {
             var result = Result.Success(42);
 
@@ -90,7 +90,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_OnFailure_CallsOnFailureFunctionWithError()
+        public void Should_CallOnFailureFunctionWithError_When_MatchIsCalledOnGenericFailure()
         {
             var error = Error.NotFound("User not found");
             var result = Result.Failure<int>(error);
@@ -104,7 +104,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_OnSuccess_DoesNotCallOnFailure()
+        public void Should_NotCallOnFailure_When_GenericMatchOnSuccess()
         {
             var result = Result.Success(100);
             var onFailureCalled = false;
@@ -122,7 +122,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_OnFailure_DoesNotCallOnSuccess()
+        public void Should_NotCallOnSuccess_When_GenericMatchOnFailure()
         {
             var result = Result.Failure<string>(Error.Unauthorized("Unauthorized"));
             var onSuccessCalled = false;
@@ -140,7 +140,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_CanTransformToAnyType()
+        public void Should_TransformToAnyType_When_GenericMatchIsUsed()
         {
             var result = Result.Success(42);
 
@@ -154,7 +154,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_WithComplexType_OnSuccess()
+        public void Should_ProcessComplexType_When_GenericMatchOnSuccess()
         {
             var user = new TestUser { Id = 1, Name = "John Doe" };
             var result = Result.Success(user);
@@ -168,7 +168,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_WithComplexType_OnFailure()
+        public void Should_ProcessComplexType_When_GenericMatchOnFailure()
         {
             var error = Error.NotFound("USER_NOT_FOUND", "User does not exist");
             var result = Result.Failure<TestUser>(error);
@@ -186,7 +186,7 @@ public partial class ResultExtensionsTests
         #region Match Integration Tests
 
         [Fact]
-        public void Match_CanBeUsedInReturnStatements()
+        public void Should_WorkInReturnStatements_When_MatchIsUsed()
         {
             static string ProcessResult(Result<int> result)
             {
@@ -204,7 +204,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_EnforcesExhaustiveHandling()
+        public void Should_EnforceExhaustiveHandling_When_MatchIsUsed()
         {
             // This test demonstrates that Match forces handling of both cases
             var result = Result.Success(100);
@@ -219,7 +219,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_CanBeChainedWithOtherOperations()
+        public void Should_ChainWithOtherOperations_When_MatchIsUsed()
         {
             var result = Result.Success(10)
                 .Map(x => x * 2)
@@ -232,7 +232,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_CanBeUsedForHttpResponseMapping()
+        public void Should_MapToHttpResponse_When_MatchIsUsed()
         {
             var successResult = Result.Success(new { UserId = 123, Name = "John" });
             var failureResult = Result.Failure<object>(Error.NotFound("User not found"));
@@ -252,7 +252,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_WithSwitchExpression_Style()
+        public void Should_WorkWithSwitchExpression_When_MatchIsUsed()
         {
             var result = Result.Success(42);
 
@@ -272,7 +272,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_NonGeneric_CanBeChainedWithBind()
+        public void Should_ChainWithBind_When_NonGenericMatchIsUsed()
         {
             var result = Result.Success()
                 .Bind(() => Result.Success())
@@ -285,7 +285,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Match_Generic_WithDifferentErrorTypes()
+        public void Should_HandleDifferentErrorTypes_When_GenericMatchIsUsed()
         {
             var notFoundResult = Result.Failure<int>(Error.NotFound("Not found"));
             var validationResult = Result.Failure<int>(Error.Validation("Invalid"));

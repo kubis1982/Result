@@ -10,7 +10,7 @@ public class ResultExtensionsTests
     #region Success Tests
 
     [Fact]
-    public void ToResult_WithSuccessResult_ReturnsNoContent()
+    public void Should_ReturnNoContent_When_ToResultIsCalledOnSuccessResult()
     {
         // Arrange
         var result = Result.Success();
@@ -25,7 +25,7 @@ public class ResultExtensionsTests
     }
 
     [Fact]
-    public void ToResult_WithSuccessResultT_ReturnsOkWithValue()
+    public void Should_ReturnOkWithValue_When_ToResultIsCalledOnSuccessResultT()
     {
         // Arrange
         var expectedValue = 42;
@@ -42,7 +42,7 @@ public class ResultExtensionsTests
     }
 
     [Fact]
-    public void ToResult_WithSuccessResultT_AndComplexObject_ReturnsOkWithValue()
+    public void Should_ReturnOkWithValue_When_ToResultIsCalledOnSuccessResultWithComplexObject()
     {
         // Arrange
         var expectedUser = new TestUser { Id = 1, Name = "Test User" };
@@ -80,7 +80,7 @@ public class ResultExtensionsTests
 
     [Theory]
     [MemberData(nameof(GetErrorTestData), DisableDiscoveryEnumeration = true)]
-    public void ToResult_WithFailureResult_ReturnsProblemDetailsWithCorrectStatusAndTitle(
+    public void Should_ReturnProblemDetailsWithCorrectStatusAndTitle_When_ToResultIsCalledOnFailureResult(
         Error error,
         int expectedStatusCode,
         string expectedTitle)
@@ -108,7 +108,7 @@ public class ResultExtensionsTests
 
     [Theory]
     [MemberData(nameof(GetErrorTestData), DisableDiscoveryEnumeration = true)]
-    public void ToResult_WithFailureResultT_ReturnsProblemDetailsWithCorrectStatusAndTitle(
+    public void Should_ReturnProblemDetailsWithCorrectStatusAndTitle_When_ToResultIsCalledOnFailureResultT(
         Error error,
         int expectedStatusCode,
         string expectedTitle)

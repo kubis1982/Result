@@ -9,7 +9,7 @@ public partial class ResultExtensionsTests
         #region Combine Tests
 
         [Fact]
-        public void Combine_WithAllSuccessfulResults_ReturnsSuccess()
+        public void Should_ReturnSuccess_When_CombiningAllSuccessfulResults()
         {
             var result1 = Result.Success();
             var result2 = Result.Success();
@@ -21,7 +21,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_WithOneFailure_ReturnsFirstFailure()
+        public void Should_ReturnFirstFailure_When_CombiningWithOneFailure()
         {
             var result1 = Result.Success();
             var error = Error.NotFound("not found");
@@ -35,7 +35,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_WithMultipleFailures_ReturnsFirstFailure()
+        public void Should_ReturnFirstFailure_When_CombiningWithMultipleFailures()
         {
             var result1 = Result.Success();
             var error1 = Error.NotFound("not found");
@@ -50,7 +50,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_WithEmptyArray_ReturnsSuccess()
+        public void Should_ReturnSuccess_When_CombiningEmptyArray()
         {
             var combined = ResultExtensions.Combine();
 
@@ -58,7 +58,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_WithIEnumerable_AllSuccessful_ReturnsSuccess()
+        public void Should_ReturnSuccess_When_CombiningIEnumerableWithAllSuccessful()
         {
             var results = new List<Result>
         {
@@ -73,7 +73,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_WithIEnumerable_OneFailure_ReturnsFirstFailure()
+        public void Should_ReturnFirstFailure_When_CombiningIEnumerableWithOneFailure()
         {
             var error = Error.Forbidden("forbidden");
             var results = new List<Result>
@@ -90,7 +90,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_WithAllSuccessfulResults_ReturnsSuccessWithValues()
+        public void Should_ReturnSuccessWithValues_When_CombiningGenericAllSuccessfulResults()
         {
             var result1 = Result.Success(10);
             var result2 = Result.Success(20);
@@ -103,7 +103,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_WithOneFailure_ReturnsFirstFailure()
+        public void Should_ReturnFirstFailure_When_CombiningGenericWithOneFailure()
         {
             var result1 = Result.Success(10);
             var error = Error.NotFound("not found");
@@ -117,7 +117,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_WithMultipleFailures_ReturnsFirstFailure()
+        public void Should_ReturnFirstFailure_When_CombiningGenericWithMultipleFailures()
         {
             var result1 = Result.Success(10);
             var error1 = Error.Validation("validation error");
@@ -132,7 +132,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_WithEmptyArray_ReturnsSuccessWithEmptyCollection()
+        public void Should_ReturnSuccessWithEmptyCollection_When_CombiningGenericEmptyArray()
         {
             var combined = ResultExtensions.Combine<int>();
 
@@ -141,7 +141,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_WithIEnumerable_AllSuccessful_ReturnsSuccessWithValues()
+        public void Should_ReturnSuccessWithValues_When_CombiningGenericIEnumerableWithAllSuccessful()
         {
             var results = new List<Result<string>>
         {
@@ -157,7 +157,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_WithIEnumerable_OneFailure_ReturnsFirstFailure()
+        public void Should_ReturnFirstFailure_When_CombiningGenericIEnumerableWithOneFailure()
         {
             var error = Error.Conflict("conflict");
             var results = new List<Result<string>>
@@ -174,7 +174,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_CanProcessResultsInPipeline()
+        public void Should_ProcessResultsInPipeline_When_CombiningGeneric()
         {
             var result1 = Result.Success(10);
             var result2 = Result.Success(20);
@@ -189,7 +189,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_Generic_FailFastStopsEvaluation()
+        public void Should_StopEvaluation_When_CombiningGenericWithFailFast()
         {
             var result1 = Result.Success(10);
             var result2 = Result.Validation<int>("validation failed");
@@ -205,7 +205,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_CanBeUsedForValidation()
+        public void Should_BeUsedForValidation_When_Combining()
         {
             string name = "John";
             string email = "john@example.com";
@@ -236,7 +236,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Combine_ValidationScenario_ReturnsFirstValidationError()
+        public void Should_ReturnFirstValidationError_When_CombiningInValidationScenario()
         {
             string name = "";
             string email = "invalid-email";

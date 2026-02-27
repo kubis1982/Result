@@ -10,7 +10,7 @@ public partial class ResultExtensionsTests
         #region Map<T, TOut> Tests
 
         [Fact]
-        public void Map_WithMapper_WhenResultIsSuccess_ReturnsSuccessWithMappedValue()
+        public void Should_ReturnSuccessWithMappedValue_When_ResultIsSuccessAndMapperIsProvided()
         {
             var result = Result.Success(42);
 
@@ -21,7 +21,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_WithMapper_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_ResultIsFailureAndMapperIsProvided()
         {
             var error = Error.NotFound("not found");
             var result = Result.Failure<int>(error);
@@ -33,7 +33,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_WithMapper_ExecutesMapperOnlyForSuccess()
+        public void Should_ExecuteMapperOnlyForSuccess_When_ResultIsFailure()
         {
             var error = Error.Validation("validation error");
             var result = Result.Failure<int>(error);
@@ -50,7 +50,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_WithMapper_CanMapToComplexType()
+        public void Should_MapToComplexType_When_MapperIsProvided()
         {
             var result = Result.Success(42);
 
@@ -66,7 +66,7 @@ public partial class ResultExtensionsTests
         #region Map<TSource> to Result Tests
 
         [Fact]
-        public void Map_ToNonGeneric_WhenResultIsSuccess_ReturnsSuccess()
+        public void Should_ReturnSuccess_When_MappingToNonGenericFromSuccess()
         {
             var result = Result.Success(42);
 
@@ -76,7 +76,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_ToNonGeneric_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_MappingToNonGenericFromFailure()
         {
             var error = Error.Validation("E001", "custom error");
             var result = Result.Failure<string>(error);
@@ -88,7 +88,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_ToNonGeneric_DiscardsValueType()
+        public void Should_DiscardValueType_When_MappingToNonGeneric()
         {
             var result = Result.Success(999);
 
@@ -104,7 +104,7 @@ public partial class ResultExtensionsTests
         #region Map<TOut> from Result Tests
 
         [Fact]
-        public void Map_FromNonGenericToGeneric_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_MappingFromNonGenericToGenericWithFailure()
         {
             var error = Error.Forbidden("access denied");
             var result = Result.Failure(error);
@@ -120,7 +120,7 @@ public partial class ResultExtensionsTests
         #region Map Integration Tests
 
         [Fact]
-        public void Map_CanChainMultipleMappings()
+        public void Should_ChainMultipleMappings_When_AllResultsAreSuccess()
         {
             var result = Result.Success(10);
 
@@ -134,7 +134,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_ChainStopsAtFirstFailure()
+        public void Should_StopAtFirstFailure_When_ChainingMappings()
         {
             var error = Error.NotFound("not found");
             var result = Result.Failure<int>(error);
@@ -149,7 +149,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Map_CanConvertGenericToNonGenericInChain()
+        public void Should_ConvertGenericToNonGeneric_When_MappingInChain()
         {
             var result = Result.Success(42);
 
