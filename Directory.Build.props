@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Authors>Mariusz Świątnicki</Authors>
+		<Authors>Kubis1982</Authors>
 		<PackageProjectUrl>https://github.com/kubis1982/Result</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/kubis1982/Result</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
