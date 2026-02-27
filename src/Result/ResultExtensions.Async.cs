@@ -70,7 +70,7 @@ public static partial class ResultExtensions
     }
 
     /// <summary>
-    /// Converts an asynchronous <see cref="Task{Result{T}}"/> to a non-generic <see cref="Task{Result}"/>.
+    /// Converts an asynchronous <see cref="Task{TResult}"/> containing <see cref="Result{T}"/> to a non-generic <see cref="Task{TResult}"/> containing <see cref="Result"/>.
     /// If the current result is a failure, the failure is propagated to the returned result.
     /// </summary>
     /// <typeparam name="T">The source value type.</typeparam>

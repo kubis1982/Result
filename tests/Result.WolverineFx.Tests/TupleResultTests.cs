@@ -24,7 +24,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task TupleResult_Success_ShouldExtractTupleAndExecuteHandle()
+        public async Task Should_ExtractTupleAndExecuteHandle_When_TupleResultIsSuccess()
         {
             // Arrange
             using var host = await CreateHost();
@@ -43,7 +43,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task TupleResult_ValidScenario_ShouldCreateOrder()
+        public async Task Should_CreateOrder_When_ValidScenarioWithTupleResult()
         {
             // Arrange
             using var host = await CreateHost();

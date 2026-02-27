@@ -23,7 +23,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task Result_Success_ShouldExtractValueAndExecuteHandle()
+        public async Task Should_ExtractValueAndExecuteHandle_When_ResultIsSuccess()
         {
             // Arrange
             using var host = await CreateHost();
@@ -41,7 +41,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task Result_LoadFails_ShouldReturnError()
+        public async Task Should_ReturnError_When_LoadFails()
         {
             // Arrange
             using var host = await CreateHost();
@@ -59,7 +59,7 @@ namespace Kubis1982.Result
         }
 
         [Fact]
-        public async Task Result_MultipleUsers_ShouldHandleCorrectly()
+        public async Task Should_HandleCorrectly_When_MultipleUsersExist()
         {
             // Arrange
             using var host = await CreateHost();
