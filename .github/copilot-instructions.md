@@ -34,12 +34,6 @@
 - Error codes: PascalCase (e.g., `ErrorCodes.NotFound`)
 - Avoid abbreviations unless widely known
 
-### Testing
-- Use xUnit framework
-- Test method names: should follow pattern `MethodName_Scenario_ExpectedBehavior`
-- Arrange-Act-Assert pattern
-- FluentAssertions for readable assertions
-
 ## Project Structure
 
 ```
@@ -202,36 +196,172 @@ public class CreateOrderHandler
 
 ## Testing Guidelines
 
+### Test Naming Philosophy: Sentence Style
+
+This project uses **Sentence Style** for test naming that reads like natural English sentences.
+
+**Our Approach:**
+- ✅ **Use**: `Should_ExpectedBehavior_When_Context` (Natural sentence)
+- Format: Test names should read as complete sentences
+- Example: `Should_CallOnSuccessFunction_When_ResultIsSuccess`
+- Example: `Should_ThrowException_When_AmountIsTooHigh`
+
+**Why Sentence Style?**
+1. **Readable**: Reads like plain English, easy to understand
+2. **Natural**: Follows how we naturally describe behavior
+3. **Clear**: Immediately tells you what the test verifies
+4. **Self-documenting**: Test name explains the scenario completely
+5. **Business-friendly**: Non-technical stakeholders can understand test names
+
+**Pattern Structure:**
+
+| Component | Example | Purpose |
+|-----------|---------|----------|
+| Should | `Should` | Indicates expected behavior |
+| Expected Behavior | `CallOnSuccessFunction` | What should happen |
+| When | `When` | Separates behavior from context |
+| Context | `ResultIsSuccess` | The scenario/state |
+
+**Full Examples:**
+- `Should_CallOnSuccessFunction_When_ResultIsSuccess`
+- `Should_CallOnFailureFunction_When_ResultIsFailure`
+- `Should_TransformToAnyType_When_UsingMatch`
+- `Should_PreserveError_When_MappingFailedResult`
+- `Should_ThrowException_When_AccessingValueOfFailedResult`
+
+**Key Principles:**
+- Names are complete **sentences** describing the test
+- Use **Should** to start the expected behavior
+- Use **When** to introduce the context/condition
+- Write in **present tense** (not past: "Called", but "Calls")
+- Be **specific** about what is being tested
+- Maintain **consistent structure** across all tests
+
 ### Test Structure
+
+**Always use Arrange-Act-Assert pattern with explicit comments:**
+
 ```csharp
 [Fact]
-public void Map_WithSuccessResult_TransformsValue()
+public void Should_CallOnSuccessFunction_When_ResultIsSuccess()
 {
     // Arrange
     var result = Result.Success(42);
-    
+
     // Act
-    var mapped = result.Map(x => x.ToString());
-    
+    var output = result.Match(
+        onSuccess: value => $"Value: {value}",
+        onFailure: error => $"Error: {error.Description}"
+    );
+
     // Assert
-    mapped.IsSuccess.Should().BeTrue();
-    mapped.Value.Should().Be("42");
+    Assert.Equal("Value: 42", output);
 }
 
 [Fact]
-public void Map_WithFailureResult_PreservesError()
+public void Should_CallOnFailureFunction_When_ResultIsFailure()
 {
     // Arrange
-    var error = Error.NotFound("Not found");
+    var error = Error.NotFound("User not found");
     var result = Result.Failure<int>(error);
-    
+
     // Act
-    var mapped = result.Map(x => x.ToString());
-    
+    var output = result.Match(
+        onSuccess: value => $"Value: {value}",
+        onFailure: err => $"Error: {err.Description}"
+    );
+
     // Assert
-    mapped.IsFailure.Should().BeTrue();
-    mapped.Error.Should().Be(error);
+    Assert.Equal("Error: User not found", output);
 }
+
+[Fact]
+public void Should_TransformToAnyType_When_UsingMatchWithSuccessResult()
+{
+    // Arrange
+    var result = Result.Success(42);
+
+    // Act
+    var transformed = result.Match(
+        onSuccess: value => new { Number = value, IsEven = value % 2 == 0 },
+        onFailure: error => new { Number = 0, IsEven = false }
+    );
+
+    // Assert
+    Assert.Equal(42, transformed.Number);
+    Assert.True(transformed.IsEven);
+}
+```
+
+### Async Test Structure
+
+For async tests, follow the same naming pattern:
+
+```csharp
+[Fact]
+public async Task Should_CallOnSuccessFunction_When_ResultIsSuccessAsync()
+{
+    // Arrange
+    var result = Result.Success(42);
+
+    // Act
+    var output = await result.MatchAsync(
+        onSuccess: async value =>
+        {
+            await Task.Delay(1);
+            return $"Value: {value}";
+        },
+        onFailure: async error =>
+        {
+            await Task.Delay(1);
+            return $"Error: {error.Description}";
+        }
+    );
+
+    // Assert
+    Assert.Equal("Value: 42", output);
+}
+
+[Fact]
+public async Task Should_CallOnSuccessFunction_When_UsingTaskResultWithAsyncFunctions()
+{
+    // Arrange
+    var resultTask = Task.FromResult(Result.Success());
+
+    // Act
+    var output = await resultTask.MatchAsync(
+        onSuccess: async () =>
+        {
+            await Task.Delay(1);
+            return "Success";
+        },
+        onFailure: async error =>
+        {
+            await Task.Delay(1);
+            return $"Error: {error.Description}";
+        }
+    );
+
+    // Assert
+    Assert.Equal("Success", output);
+}
+```
+
+### Assertion Style
+
+**Use xUnit Assert class - NOT FluentAssertions:**
+
+```csharp
+// ✅ Good: xUnit Assert
+Assert.True(result.IsSuccess);
+Assert.False(result.IsFailure);
+Assert.Equal(42, result.Value);
+Assert.Equal("Expected", actual);
+Assert.Throws<ResultException>(() => failedResult.Value);
+
+// ❌ Bad: FluentAssertions (not used in this project)
+result.IsSuccess.Should().BeTrue();
+result.Value.Should().Be(42);
 ```
 
 ### Theory Tests for Multiple Scenarios
@@ -240,10 +370,16 @@ public void Map_WithFailureResult_PreservesError()
 [InlineData(ErrorType.NotFound, 404)]
 [InlineData(ErrorType.Validation, 400)]
 [InlineData(ErrorType.Conflict, 409)]
-public void ToStatusCode_MapsErrorTypeCorrectly(ErrorType type, int expected)
+public void Should_MapToCorrectStatusCode_When_ErrorTypeIsProvided(ErrorType type, int expected)
 {
+    // Arrange
     var error = new Error { ErrorType = type };
-    error.ToStatusCode().Should().Be(expected);
+
+    // Act
+    var statusCode = error.ToStatusCode();
+
+    // Assert
+    Assert.Equal(expected, statusCode);
 }
 ```
 

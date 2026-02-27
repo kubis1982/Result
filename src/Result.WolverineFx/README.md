@@ -19,7 +19,7 @@ dotnet add package Kubis1982.Result.WolverineFx
 
 ### Message Handler with Result<T>
 
-```bash
+```csharp
 public record ResultTCommand(int ContractorId);
 
 public static class ResultTHandler
@@ -62,10 +62,12 @@ The library provides ResultContinuationStrategy that automatically handles Resul
 
 Register the continuation strategy in your WolverineFx configuration:
 
+```csharp
 builder.Host.UseWolverine(opts =>
 {
     opts.Policies.Add<ResultContinuationStrategy>();
 });
+```
 
 ## Benefits
 

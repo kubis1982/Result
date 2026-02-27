@@ -10,7 +10,7 @@ public partial class ResultExtensionsTests
         #region Bind<T, TOut> Tests
 
         [Fact]
-        public void Bind_WithBinder_WhenResultIsSuccess_ReturnsBinderResult()
+        public void Should_ReturnBinderResult_When_BindIsCalledOnSuccess()
         {
             var result = Result.Success(42);
 
@@ -21,7 +21,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_WithBinder_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_BindIsCalledOnFailure()
         {
             var result = Result.NotFound<int>("not found");
 
@@ -32,7 +32,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_WithBinder_CanReturnFailureFromBinder()
+        public void Should_ReturnFailureFromBinder_When_BindIsUsed()
         {
             var result = Result.Success(42);
             var resultError = Result.Validation("validation failed");
@@ -44,7 +44,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_WithBinder_ExecutesBinderOnlyForSuccess()
+        public void Should_ExecuteBinderOnlyForSuccess_When_BindIsUsed()
         {
             var error = Error.Validation("validation error");
             var result = Result.Failure<int>(error);
@@ -61,7 +61,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_WithBinder_CanChainOperations()
+        public void Should_ChainOperations_When_BindIsUsed()
         {
             var result = Result.Success(10);
 
@@ -75,7 +75,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_WithBinder_ChainStopsAtFirstFailure()
+        public void Should_StopAtFirstFailure_When_ChainingBind()
         {
             var result = Result.Success(10);
             var error = Error.Validation("failed");
@@ -94,7 +94,7 @@ public partial class ResultExtensionsTests
         #region Bind<TSource> to Result Tests
 
         [Fact]
-        public void Bind_ToNonGeneric_WhenResultIsSuccess_ReturnsBinderResult()
+        public void Should_ReturnBinderResult_When_BindToNonGenericIsCalledOnSuccess()
         {
             var result = Result.Success(42);
 
@@ -104,7 +104,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_ToNonGeneric_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_BindToNonGenericIsCalledOnFailure()
         {
             var error = Error.Validation("E001", "custom error");
             var result = Result.Failure<string>(error);
@@ -116,7 +116,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_ToNonGeneric_CanReturnFailureFromBinder()
+        public void Should_ReturnFailureFromBinder_When_BindToNonGenericIsUsed()
         {
             var result = Result.Success(42);
             var binderError = Error.Unauthorized("unauthorized");
@@ -128,7 +128,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_ToNonGeneric_ExecutesBinderOnlyForSuccess()
+        public void Should_ExecuteBinderOnlyForSuccess_When_BindToNonGenericIsUsed()
         {
             var error = Error.Validation("validation error");
             var result = Result.Failure<int>(error);
@@ -149,7 +149,7 @@ public partial class ResultExtensionsTests
         #region Bind<TOut> from Result Tests
 
         [Fact]
-        public void Bind_FromNonGenericToGeneric_WhenResultIsSuccess_ReturnsBinderResult()
+        public void Should_ReturnBinderResult_When_BindFromNonGenericToGenericIsCalledOnSuccess()
         {
             var result = Result.Success();
 
@@ -160,7 +160,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_FromNonGenericToGeneric_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_BindFromNonGenericToGenericIsCalledOnFailure()
         {
             var error = Error.Forbidden("access denied");
             var result = Result.Failure(error);
@@ -172,7 +172,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_FromNonGenericToGeneric_CanReturnFailureFromBinder()
+        public void Should_ReturnFailureFromBinder_When_BindFromNonGenericToGenericIsUsed()
         {
             var result = Result.Success();
             var binderError = Error.NotFound("not found");
@@ -184,7 +184,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_FromNonGenericToGeneric_ExecutesBinderOnlyForSuccess()
+        public void Should_ExecuteBinderOnlyForSuccess_When_BindFromNonGenericToGenericIsUsed()
         {
             var error = Error.Validation("validation error");
             var result = Result.Failure(error);
@@ -205,7 +205,7 @@ public partial class ResultExtensionsTests
         #region Bind from Result to Result Tests
 
         [Fact]
-        public void Bind_NonGenericToNonGeneric_WhenResultIsSuccess_ReturnsBinderResult()
+        public void Should_ReturnBinderResult_When_BindNonGenericToNonGenericIsCalledOnSuccess()
         {
             var result = Result.Success();
 
@@ -215,7 +215,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_NonGenericToNonGeneric_WhenResultIsFailure_PropagatesFailure()
+        public void Should_PropagateFailure_When_BindNonGenericToNonGenericIsCalledOnFailure()
         {
             var result = Result.Validation("SERVER.ERROR", "server error");
 
@@ -226,7 +226,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_NonGenericToNonGeneric_CanReturnFailureFromBinder()
+        public void Should_ReturnFailureFromBinder_When_BindNonGenericToNonGenericIsUsed()
         {
             var result = Result.Success();
             var binderError = Error.Conflict("conflict");
@@ -238,7 +238,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_NonGenericToNonGeneric_ExecutesBinderOnlyForSuccess()
+        public void Should_ExecuteBinderOnlyForSuccess_When_BindNonGenericToNonGenericIsUsed()
         {
             var error = Error.Validation("validation error");
             var result = Result.Failure(error);
@@ -255,7 +255,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_NonGenericToNonGeneric_CanChainMultipleOperations()
+        public void Should_ChainMultipleOperations_When_BindNonGenericToNonGenericIsUsed()
         {
             var result = Result.Success();
 
@@ -272,7 +272,7 @@ public partial class ResultExtensionsTests
         #region Bind Integration Tests
 
         [Fact]
-        public void Bind_CanMixWithMapInChain()
+        public void Should_MixWithMapInChain_When_BindIsUsed()
         {
             var result = Result.Success(10);
 
@@ -287,7 +287,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_ComplexChainWithMultipleTransformations()
+        public void Should_HandleComplexChainWithMultipleTransformations_When_BindIsUsed()
         {
             var result = Result.Success("10");
 
@@ -305,7 +305,7 @@ public partial class ResultExtensionsTests
         }
 
         [Fact]
-        public void Bind_ComplexChainStopsAtFirstFailureInBind()
+        public void Should_StopAtFirstFailureInBind_When_UsingComplexChain()
         {
             var result = Result.Success("abc");
 

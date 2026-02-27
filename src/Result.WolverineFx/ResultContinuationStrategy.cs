@@ -26,14 +26,14 @@ namespace Kubis1982.Result
             var result = call.Creates.FirstOrDefault(x => x.VariableType == typeof(Result));
             if (result != null)
             {
-                frame = new MaybeEndHandlerWithResultFrame(result, GetHandlerReturnType(call));
+                frame = new HandlerWithResultFrame(result, GetHandlerReturnType(call));
                 return true;
             }
 
             result = call.Creates.FirstOrDefault(x => x.VariableType.IsGenericType && x.VariableType.GetGenericTypeDefinition() == typeof(Result<>));
             if (result != null)
             {
-                frame = new MaybeEndHandlerWithGenericResultFrame(result, GetHandlerReturnType(call));
+                frame = new HandlerWithGenericResultFrame(result, GetHandlerReturnType(call));
                 return true;
             }
 
@@ -65,13 +65,10 @@ namespace Kubis1982.Result
         {
             var type = variable.VariableType;
 
-            // Check if the type is a tuple (ValueTuple)
-            if (!type.IsGenericType)
-                return [];
+            if (!type.IsGenericType) return [];
 
             var genericTypeDefinition = type.GetGenericTypeDefinition();
 
-            // Check for ValueTuple types (ValueTuple<T1>, ValueTuple<T1,T2>, etc.)
             if (genericTypeDefinition.FullName?.StartsWith("System.ValueTuple") == true)
             {
                 var tupleTypes = type.GetGenericArguments();
@@ -83,7 +80,6 @@ namespace Kubis1982.Result
                 return variables;
             }
 
-            // Check for legacy Tuple types (Tuple<T1>, Tuple<T1,T2>, etc.)
             if (genericTypeDefinition.FullName?.StartsWith("System.Tuple") == true)
             {
                 var tupleTypes = type.GetGenericArguments();
@@ -97,16 +93,20 @@ namespace Kubis1982.Result
 
             return [];
         }
-
       
-        private class MaybeEndHandlerWithResultFrame : AsyncFrame
+        private class HandlerWithResultFrame : AsyncFrame
         {
             private readonly Type? _handlerReturnType;
             private readonly Variable _result;
 
-            public MaybeEndHandlerWithResultFrame(Variable result, Type? handlerReturnType)
+            public HandlerWithResultFrame(Variable result, Type? handlerReturnType)
             {
+                string resultVariableName = "result_" + Guid.NewGuid().ToString()[0..8];
+
+                result.OverrideName(resultVariableName);
+
                 uses.Add(result);
+
                 _result = result;
                 _handlerReturnType = handlerReturnType;
             }
@@ -130,26 +130,34 @@ namespace Kubis1982.Result
             }
         }
         
-        private class MaybeEndHandlerWithGenericResultFrame : AsyncFrame
+        private class HandlerWithGenericResultFrame : AsyncFrame
         {
             private readonly Type? _handlerReturnType;
             private readonly Variable _result;
 
-            public MaybeEndHandlerWithGenericResultFrame(Variable result, Type? handlerReturnType)
+            public HandlerWithGenericResultFrame(Variable result, Type? handlerReturnType)
             {
-                uses.Add(result);
-                // Register a new variable for the success value of the Result<T>
-                creates.Add(new Variable(result.VariableType.GetGenericArguments()[0], result.Usage + "SuccessValue"));
+                string resultTypeName = result.VariableType.GetGenericArguments()[0].Name;
+                if (resultTypeName.StartsWith("ValueTuple"))
+                    resultTypeName = "ValueTuple";
+                string resultVariableName = char.ToLower(resultTypeName[0]) + resultTypeName.Substring(1) + "Result_" + Guid.NewGuid().ToString()[0..8];
 
-                var tupleInnerValues = GetTupleInnerValues(new Variable(result.VariableType.GetGenericArguments()[0],
-                    result.Usage + "SuccessValue"));
+                result.OverrideName(resultVariableName);
 
-                // If the Result<T> is a tuple, create variables for each inner value
-                foreach (var innerValue in tupleInnerValues)
-                    creates.Add(innerValue);
+                uses.Add(
+                    new Variable(result.VariableType.GetGenericArguments()[0],
+                    result.Usage + "_SuccessValue"));
 
+                creates.Add(
+                    new Variable(result.VariableType.GetGenericArguments()[0], 
+                    result.Usage + "_SuccessValue"));
 
-                creates.Add(new Variable(result.VariableType.GetGenericArguments()[0], result.Usage + "SuccessValue"));
+                var tupleInnerValues = GetTupleInnerValues(
+                    new Variable(result.VariableType.GetGenericArguments()[0],
+                    result.Usage + "_SuccessValue"));
+
+                foreach (var innerValue in tupleInnerValues) creates.Add(innerValue);
+                
                 _result = result;
                 _handlerReturnType = handlerReturnType;
             }
@@ -169,7 +177,7 @@ namespace Kubis1982.Result
                 writer.FinishBlock();
 
                 writer.WriteComment("Extracting the success value from Result<T>");
-                writer.WriteLine($"var {_result.Usage}SuccessValue = {_result.Usage}.Value;");
+                writer.WriteLine($"var {_result.Usage}_SuccessValue = {_result.Usage}.Value;");
 
                 Next?.GenerateCode(method, writer);
             }

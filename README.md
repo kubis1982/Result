@@ -51,6 +51,7 @@ dotnet add package Kubis1982.Result.WolverineFx
 - **ASP.NET Core integration**: Seamless conversion to IResult and ProblemDetails
 - **WolverineFx integration**: Message handler support with automatic continuation strategies
 - **Rich error types**: Structured `Error` with codes, descriptions, and error types
+- **Pattern matching**: `Match` method enforces exhaustive handling of success/failure cases
 - **Tuple deconstruction**: Use pattern matching with `Deconstruct` method
 - **TryGetValue pattern**: Safe value extraction without exceptions
 - **Combine operations**: Compose multiple results with fail-fast behavior
