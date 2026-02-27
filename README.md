@@ -116,7 +116,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Mariusz Świątnicki**
+**Kubis1982**
 
 - GitHub: [@kubis1982](https://github.com/kubis1982)
 - Project: [Result](https://github.com/kubis1982/Result)

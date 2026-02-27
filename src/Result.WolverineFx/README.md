@@ -63,9 +63,11 @@ The library provides ResultContinuationStrategy that automatically handles Resul
 Register the continuation strategy in your WolverineFx configuration:
 
 ```csharp
-builder.Host.UseWolverine(opts =>
+using Wolverine.Middleware;
+
+builder.Host.UseWolverine(options =>
 {
-    opts.Policies.Add<ResultContinuationStrategy>();
+    options.CodeGeneration.AddContinuationStrategy<ResultContinuationStrategy>();
 });
 ```
 
@@ -87,5 +89,5 @@ MIT License - see LICENCE file
 
 ## Author
 
-Mariusz Swiatnicki
+Kubis1982
 https://github.com/kubis1982/Result

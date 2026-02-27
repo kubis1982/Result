@@ -45,5 +45,5 @@ MIT License - see LICENCE file
 
 ## Author
 
-Mariusz Swiatnicki
+Kubis1982
 https://github.com/kubis1982/Result

@@ -621,5 +621,5 @@ MIT License - see [LICENCE](../../LICENCE) file
 
 ## Author
 
-Mariusz Świątnicki  
+Kubis1982
 https://github.com/kubis1982/Result
