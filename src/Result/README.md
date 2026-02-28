@@ -5,8 +5,10 @@ A lightweight and fluent implementation of the Result pattern for .NET, providin
 ## Features
 
 - Type-safe error handling with Result and Result<T> types
-- Fluent API for chaining operations
+- Fluent API for chaining operations (Map, Bind, Ensure, Match)
 - Railway-oriented programming pattern support
+- Chainable validation with Ensure methods
+- Full async/await support (MapAsync, BindAsync, EnsureAsync, MatchAsync)
 - Minimal dependencies - pure .NET implementation
 - Rich Error structure with codes and descriptions
 
@@ -374,6 +376,72 @@ var numbersResult = Result.Combine(
 
 **Important:** `Combine` implements fail-fast behavior - it stops at the first failure and returns immediately without evaluating remaining results.
 
+### Ensure (Validation)
+
+Validate results with chainable predicates, following Railway-Oriented Programming principles:
+
+```csharp
+// Single validation
+var result = Result.Success(42)
+    .Ensure(x => x > 0, Error.Validation("Value must be positive"));
+
+// Chained validations - stops at first failure
+var validated = Result.Success(user)
+    .Ensure(u => u.IsActive, Error.Validation("User is not active"))
+    .Ensure(u => u.Age >= 18, Error.Validation("User must be an adult"))
+    .Ensure(u => !string.IsNullOrEmpty(u.Email), Error.Validation("Email is required"));
+
+// Real-world example
+public Result<User> GetActiveUser(int id)
+{
+    return GetUser(id)
+        .Ensure(user => user.IsActive, Error.Validation("User is not active"))
+        .Ensure(user => !user.IsDeleted, Error.NotFound("User was deleted"))
+        .Ensure(user => user.EmailVerified, Error.Forbidden("Email not verified"));
+}
+
+// Non-generic Result validation
+var result = Result.Success()
+    .Ensure(() => ConfigurationIsValid(), Error.Configuration("Invalid configuration"))
+    .Ensure(() => DatabaseIsConnected(), Error.Unavailable("Database unavailable"));
+
+// Async validation with EnsureAsync
+public async Task<Result<Order>> ProcessOrder(int orderId)
+{
+    return await GetOrderAsync(orderId)
+        .Ensure(order => order.Items.Any(), Error.Validation("Order must contain items"))
+        .EnsureAsync(
+            async order => await HasSufficientStock(order.Items),
+            Error.Conflict("Insufficient stock"))
+        .EnsureAsync(
+            async order => await IsCustomerEligible(order.CustomerId),
+            Error.Forbidden("Customer not eligible"));
+}
+
+// Integration with other operations
+public async Task<Result<OrderConfirmation>> PlaceOrder(CreateOrderRequest request)
+{
+    return await ValidateRequest(request)
+        .Ensure(r => r.TotalAmount > 0, Error.Validation("Total must be positive"))
+        .EnsureAsync(async r => await HasSufficientCredit(r.CustomerId, r.TotalAmount),
+            Error.Conflict("Insufficient credit"))
+        .BindAsync(async r => await CreateOrderAsync(r))
+        .MapAsync(async order => await GenerateConfirmationAsync(order));
+}
+```
+
+**Ensure Behavior:**
+- **Short-circuit**: If result is already a failure, validation is skipped
+- **Fail-fast**: Stops at first failed predicate
+- **Preserves errors**: Original errors propagate unchanged
+- **Chainable**: Multiple validations can be chained fluently
+
+**When to use Ensure:**
+- Business rule validation in pipelines
+- Conditional checks that can fail with specific errors
+- Guard clauses in functional style
+- Alternative to early-return if-checks
+
 ### Async Operations (MapAsync / BindAsync / MatchAsync)
 
 Handle asynchronous operations in Result pipelines:
@@ -429,6 +497,8 @@ var result = await GetDataAsync()
 - `MapAsync<T, TOut>(Task<Result<T>>, Func<T, TOut>)` - Transform from async result
 - `BindAsync<T, TOut>(Result<T>, Func<T, Task<Result<TOut>>>)` - Chain async operations
 - `BindAsync<T, TOut>(Task<Result<T>>, Func<T, Result<TOut>>)` - Chain from async result
+- `EnsureAsync<T>(Result<T>, Func<T, Task<bool>>, Error)` - Async validation
+- `EnsureAsync<T>(Task<Result<T>>, Func<T, bool>, Error)` - Validate async result
 - `MatchAsync<T, TOut>(Result<T>, Func<T, Task<TOut>>, Func<Error, Task<TOut>>)` - Async pattern matching
 - `MatchAsync<T, TOut>(Task<Result<T>>, Func<T, TOut>, Func<Error, TOut>)` - Match async result
 - `MatchAsync<T, TOut>(Task<Result<T>>, Func<T, Task<TOut>>, Func<Error, Task<TOut>>)` - Fully async match
@@ -562,6 +632,7 @@ public Result<Invoice> GenerateInvoice(int orderId)
 public Result<OrderConfirmation> ProcessOrder(OrderRequest request)
 {
     return ValidateOrder(request)
+        .Ensure(order => order.Items.Any(), Error.Validation("Order must contain items"))
         .Bind(order => CheckInventory(order))
         .Bind(order => ReserveItems(order))
         .Bind(order => ProcessPayment(order))
@@ -584,6 +655,52 @@ public Result<User> UpdateUser(int userId, UpdateUserRequest request)
             ? UpdateName(user, request.Name)
             : Result.Success(user))
         .Bind(user => SaveUser(user));
+}
+```
+
+### Validation Pattern with Ensure
+
+Alternative to early returns using `Ensure` for validation:
+
+```csharp
+// Before (manual checking)
+public Result<User> GetActiveUser(int id)
+{
+    var userResult = GetUser(id);
+    if (userResult.IsFailure)
+        return userResult;
+
+    var user = userResult.Value;
+    if (!user.IsActive)
+        return Error.Validation("User is not active");
+
+    if (user.IsDeleted)
+        return Error.NotFound("User was deleted");
+
+    return Result.Success(user);
+}
+
+// After (with Ensure)
+public Result<User> GetActiveUser(int id)
+{
+    return GetUser(id)
+        .Ensure(user => user.IsActive, Error.Validation("User is not active"))
+        .Ensure(user => !user.IsDeleted, Error.NotFound("User was deleted"));
+}
+
+// Complex validation pipeline
+public async Task<Result<Transaction>> ProcessPayment(PaymentRequest request)
+{
+    return await ValidatePaymentRequest(request)
+        .Ensure(req => req.Amount > 0, Error.Validation("Amount must be positive"))
+        .Ensure(req => req.Amount <= 10000, Error.Validation("Amount exceeds limit"))
+        .EnsureAsync(
+            async req => await HasSufficientFunds(req.AccountId, req.Amount),
+            Error.Conflict("Insufficient funds"))
+        .EnsureAsync(
+            async req => await IsAccountActive(req.AccountId),
+            Error.Forbidden("Account is not active"))
+        .BindAsync(async req => await CreateTransactionAsync(req));
 }
 ```
 

@@ -323,4 +323,153 @@ public static partial class ResultExtensions
     }
 
     #endregion
+
+    #region EnsureAsync
+
+    /// <summary>
+    /// Asynchronously validates the value of a successful <see cref="Result{T}"/> using a predicate.
+    /// If the predicate returns false, the result is converted to a failure with the provided error.
+    /// If the current result is already a failure, the failure is propagated unchanged.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result.</typeparam>
+    /// <param name="result">The result to validate.</param>
+    /// <param name="predicate">An asynchronous validation function that returns true if the value is valid.</param>
+    /// <param name="error">The error to return if the validation fails.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the original <see cref="Result{T}"/> if it is successful and the predicate returns true;
+    /// otherwise a failed <see cref="Result{T}"/> with the provided error.
+    /// </returns>
+    public static async Task<Result<T>> EnsureAsync<T>(
+        this Result<T> result,
+        Func<T, Task<bool>> predicate,
+        Error error)
+    {
+        if (!result.IsSuccess)
+        {
+            return result;
+        }
+
+        var isValid = await predicate(result.Value).ConfigureAwait(false);
+        return isValid ? result : Result.Failure<T>(error);
+    }
+
+    /// <summary>
+    /// Validates the value of a successful result from an asynchronous <see cref="Task{Result}"/> using a predicate.
+    /// If the predicate returns false, the result is converted to a failure with the provided error.
+    /// If the current result is already a failure, the failure is propagated unchanged.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result.</typeparam>
+    /// <param name="resultTask">The task containing the result to validate.</param>
+    /// <param name="predicate">A synchronous validation function that returns true if the value is valid.</param>
+    /// <param name="error">The error to return if the validation fails.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the original <see cref="Result{T}"/> if it is successful and the predicate returns true;
+    /// otherwise a failed <see cref="Result{T}"/> with the provided error.
+    /// </returns>
+    public static async Task<Result<T>> EnsureAsync<T>(
+        this Task<Result<T>> resultTask,
+        Func<T, bool> predicate,
+        Error error)
+    {
+        var result = await resultTask.ConfigureAwait(false);
+        return result.Ensure(predicate, error);
+    }
+
+    /// <summary>
+    /// Asynchronously validates the value of a successful result from an asynchronous <see cref="Task{Result}"/> using a predicate.
+    /// If the predicate returns false, the result is converted to a failure with the provided error.
+    /// If the current result is already a failure, the failure is propagated unchanged.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result.</typeparam>
+    /// <param name="resultTask">The task containing the result to validate.</param>
+    /// <param name="predicate">An asynchronous validation function that returns true if the value is valid.</param>
+    /// <param name="error">The error to return if the validation fails.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the original <see cref="Result{T}"/> if it is successful and the predicate returns true;
+    /// otherwise a failed <see cref="Result{T}"/> with the provided error.
+    /// </returns>
+    public static async Task<Result<T>> EnsureAsync<T>(
+        this Task<Result<T>> resultTask,
+        Func<T, Task<bool>> predicate,
+        Error error)
+    {
+        var result = await resultTask.ConfigureAwait(false);
+        return await result.EnsureAsync(predicate, error).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Asynchronously validates a successful non-generic <see cref="Result"/> using a predicate.
+    /// If the predicate returns false, the result is converted to a failure with the provided error.
+    /// If the current result is already a failure, the failure is propagated unchanged.
+    /// </summary>
+    /// <param name="result">The result to validate.</param>
+    /// <param name="predicate">An asynchronous validation function that returns true if the result is valid.</param>
+    /// <param name="error">The error to return if the validation fails.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the original <see cref="Result"/> if it is successful and the predicate returns true;
+    /// otherwise a failed <see cref="Result"/> with the provided error.
+    /// </returns>
+    public static async Task<Result> EnsureAsync(
+        this Result result,
+        Func<Task<bool>> predicate,
+        Error error)
+    {
+        if (!result.IsSuccess)
+        {
+            return result;
+        }
+
+        var isValid = await predicate().ConfigureAwait(false);
+        return isValid ? result : Result.Failure(error);
+    }
+
+    /// <summary>
+    /// Validates a successful non-generic result from an asynchronous <see cref="Task{Result}"/> using a predicate.
+    /// If the predicate returns false, the result is converted to a failure with the provided error.
+    /// If the current result is already a failure, the failure is propagated unchanged.
+    /// </summary>
+    /// <param name="resultTask">The task containing the result to validate.</param>
+    /// <param name="predicate">A synchronous validation function that returns true if the result is valid.</param>
+    /// <param name="error">The error to return if the validation fails.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the original <see cref="Result"/> if it is successful and the predicate returns true;
+    /// otherwise a failed <see cref="Result"/> with the provided error.
+    /// </returns>
+    public static async Task<Result> EnsureAsync(
+        this Task<Result> resultTask,
+        Func<bool> predicate,
+        Error error)
+    {
+        var result = await resultTask.ConfigureAwait(false);
+        return result.Ensure(predicate, error);
+    }
+
+    /// <summary>
+    /// Asynchronously validates a successful non-generic result from an asynchronous <see cref="Task{Result}"/> using a predicate.
+    /// If the predicate returns false, the result is converted to a failure with the provided error.
+    /// If the current result is already a failure, the failure is propagated unchanged.
+    /// </summary>
+    /// <param name="resultTask">The task containing the result to validate.</param>
+    /// <param name="predicate">An asynchronous validation function that returns true if the result is valid.</param>
+    /// <param name="error">The error to return if the validation fails.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// The task result contains the original <see cref="Result"/> if it is successful and the predicate returns true;
+    /// otherwise a failed <see cref="Result"/> with the provided error.
+    /// </returns>
+    public static async Task<Result> EnsureAsync(
+        this Task<Result> resultTask,
+        Func<Task<bool>> predicate,
+        Error error)
+    {
+        var result = await resultTask.ConfigureAwait(false);
+        return await result.EnsureAsync(predicate, error).ConfigureAwait(false);
+    }
+
+    #endregion
 }

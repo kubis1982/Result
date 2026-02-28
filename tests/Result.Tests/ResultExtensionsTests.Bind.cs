@@ -4,7 +4,7 @@ namespace Kubis1982.Result;
 
 public partial class ResultExtensionsTests
 {
-    public class BindingTests
+    public class BindTests
     {
 
         #region Bind<T, TOut> Tests

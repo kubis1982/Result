@@ -4,7 +4,7 @@ namespace Kubis1982.Result;
 
 public partial class ResultExtensionsTests
 {
-    public class MappingTests
+    public class MapTests
     {
 
         #region Map<T, TOut> Tests
