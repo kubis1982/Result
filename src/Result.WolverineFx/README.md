@@ -87,6 +87,18 @@ builder.Host.UseWolverine(options =>
 });
 ```
 
+### Stopping postprocessors on a failed `Handle`
+
+`ResultContinuationStrategy` stops the chain only for middleware methods (`LoadAsync`, `Before`, ...). When `Handle` itself returns a failed `Result`, postprocessors such as EF Core `SaveChangesAsync` and the transaction commit still run. Register `ReturnOnFailedResultPolicy` to return before them (the result is still delivered to `InvokeAsync`):
+
+```csharp
+builder.Host.UseWolverine(options =>
+{
+    options.CodeGeneration.AddContinuationStrategy<ResultContinuationStrategy>();
+    options.Policies.Add<ReturnOnFailedResultPolicy>();
+});
+```
+
 ## Benefits
 
 - Clean separation of business logic and infrastructure concerns
