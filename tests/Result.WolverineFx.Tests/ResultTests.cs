@@ -1,6 +1,7 @@
 namespace Kubis1982.Result
 {
     using JasperFx.CodeGeneration;
+    using JasperFx.RuntimeCompiler;
     using Kubis1982.Result.Handlers;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -17,6 +18,7 @@ namespace Kubis1982.Result
                 {
                     opts.CodeGeneration.AddContinuationStrategy<ResultContinuationStrategy>();
                     opts.CodeGeneration.TypeLoadMode = TypeLoadMode.Auto;
+                    opts.Services.AddRuntimeCompilation();
                     opts.Discovery.IncludeAssembly(typeof(ResultHandler).Assembly);
                 })
                 .StartAsync();

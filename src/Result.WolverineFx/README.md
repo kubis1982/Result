@@ -15,6 +15,22 @@ WolverineFx extensions for the Result pattern, providing message handling and co
 dotnet add package Kubis1982.Result.WolverineFx
 ```
 
+WolverineFx 6 no longer compiles handler code at runtime by default. Unless you pre-generate code (`TypeLoadMode.Static`), also add the runtime compiler:
+
+```bash
+dotnet add package JasperFx.RuntimeCompiler
+```
+
+```csharp
+using JasperFx.RuntimeCompiler;
+
+builder.Host.UseWolverine(options =>
+{
+    options.Services.AddRuntimeCompilation();
+    options.CodeGeneration.AddContinuationStrategy<ResultContinuationStrategy>();
+});
+```
+
 ## Quick Start
 
 ### Message Handler with Result<T>
